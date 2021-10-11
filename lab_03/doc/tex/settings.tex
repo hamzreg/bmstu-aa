@@ -58,26 +58,6 @@
 	backgroundcolor=\color{white},
 }
 
-\usepackage{pgfplots}
-\usetikzlibrary{datavisualization}
-\usetikzlibrary{datavisualization.formats.functions}
-
-\usepackage{graphicx}
-\newcommand{\img}[3] {
-	\begin{figure}[h!]
-		\center{\includegraphics[height=#1]{inc/img/#2}}
-		\caption{#3}
-		\label{img:#2}
-	\end{figure}
-}
-\newcommand{\boximg}[3] {
-	\begin{figure}[h]
-		\center{\fbox{\includegraphics[height=#1]{inc/img/#2}}}
-		\caption{#3}
-		\label{img:#2}
-	\end{figure}
-}
-
 \usepackage[justification=centering]{caption} % Настройка подписей float объектов
 
 \usepackage[unicode,pdftex]{hyperref} % Ссылки в pdf
@@ -88,3 +68,26 @@
 
 
 \newcommand{\code}[1]{\texttt{#1}}
+
+% Рисунки
+\usepackage{float}
+\usepackage[justification=centering]{caption}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.9}
+\usetikzlibrary{datavisualization}
+\usetikzlibrary{datavisualization.formats.functions}
+\usepackage{graphicx}
+\newcommand{\img}[3] {
+    \begin{figure}[h]
+        \center{\includegraphics[height=#1]{assets/img/#2}}
+        \caption{#3}
+        \label{img:#2}
+    \end{figure}
+}
+\newcommand{\boximg}[3] {
+    \begin{figure}[h]
+        \center{\fbox{\includegraphics[height=#1]{assets/img/#2}}}
+        \caption{#3}
+        \label{img:#2}
+    \end{figure}
+}

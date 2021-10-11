@@ -1,0 +1,67 @@
+\chapter{Конструкторская часть}
+
+В данном разделе будут представлены схемы алгоритмов сортировки выбором, Шеллом и гномьей сортировки и вычислены трудоемкости указанных алгоритмов.
+
+\section{Разработка алгоритмов}
+
+На рисунках представлены схемы алгоритмов сортировки выбором, Шеллом и гномьей сортировки.
+
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[scale=0.4]{img/selection_sort.png}
+	\end{center}
+	\captionsetup{justification=centering}
+	\caption{Схема алгоритма сортировки выбором}
+	\label{img:selection_sort}
+\end{figure}
+
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[scale=0.5]{img/shell_sort.png}
+	\end{center}
+	\captionsetup{justification=centering}
+	\caption{Схема алгоритма сортировки Шелла}
+	\label{img:shell_sort}
+\end{figure}
+
+\newpage
+
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[scale=0.5]{img/gnome_sort.png}
+	\end{center}
+	\captionsetup{justification=centering}
+	\caption{Схема алгоритма гномьей сортировки}
+	\label{img:gnome_sort}
+\end{figure}
+
+\section{Модель вычислений для оценки трудоёмкости алгоритмов}
+
+Для определения трудоемкости алгоритмов необходимо ввести модель вычислений:
+
+\begin{enumerate}
+	\item операции из списка (\ref{for:operations}) имеют трудоемкость равную 1;
+	\begin{equation}
+		\label{for:operations}
+		+, -, /, *, \%, =, +=, -=, *=, /=, \%=, ==, !=, <, >, <=, >=, [], ++, {-}-
+	\end{equation}
+	\item трудоемкость оператора выбора \code{if условие then A else B} рассчитывается, как (\ref{for:if});
+	\begin{equation}
+		\label{for:if}
+		f_{if} = f_{\text{условия}} +
+		\begin{cases}
+			f_A, & \text{если условие выполняется,}\\
+			f_B, & \text{иначе.}
+		\end{cases}
+	\end{equation}
+	\item трудоемкость цикла рассчитывается, как (\ref{for:cycle});
+	\begin{equation}
+		\label{for:cycle}
+		f_{for} = f_{\text{инициализации}} + f_{\text{сравнения}} + N(f_{\text{тела}} + f_{\text{инкремент}} + f_{\text{сравнения}})
+	\end{equation}
+	\item трудоемкость вызова функции равна 0.
+\end{enumerate}
+
+\section{Трудоёмкость алгоритмов}
+
+\section*{Вывод}
