@@ -1,7 +1,24 @@
+from dataclasses import dataclass
 from random import randint
 
-LOW = -1000
-TOP = 1000
+@dataclass
+class ARR:
+    """
+        Константы для выбора типа массива.
+    """
+
+    msg = "\n\nТип массива:\n" + \
+          "1 - отсортированный\n" + \
+          "2 - отсортированный в обратном порядке\n" + \
+          "3 - случайный\n" + \
+          "Выбор: "
+    
+    sorted = 1
+    reversed = 2
+    randomed = 3
+
+    low = -1000
+    top = 1000
 
 
 def input_arr():
@@ -46,7 +63,8 @@ def get_sorted_arr(size):
 
 def get_reversed_arr(size):
     """
-        Перевернутый массив.
+        Отсортированный в 
+        обратном порядке массив.
     """
 
     arr = []
@@ -65,6 +83,6 @@ def get_random_arr(size):
     arr = []
 
     for _ in range(size):
-        arr.append(randint(LOW, TOP))
+        arr.append(randint(ARR.low, ARR.top))
 
     return arr
