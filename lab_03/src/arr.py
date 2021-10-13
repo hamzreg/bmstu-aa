@@ -44,7 +44,7 @@ def sort_arr(sort_type):
     arr = input_arr()
     sort_type(arr, len(arr))
     
-    print("Отсортированный массив:")
+    print("\nОтсортированный массив:")
     print(arr)
 
 

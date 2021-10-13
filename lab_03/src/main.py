@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from arr import sort_arr
 from sort import *
 from graph_result import get_graph_result
-from time_test import measure_time
+from time_test import print_time
 
 @dataclass
 class Menu:
@@ -43,7 +43,7 @@ def process():
         elif command == Menu.plot:
             get_graph_result()
         elif command == Menu.measure:
-            measure_time()
+            print_time()
         else:
             process = False
             
