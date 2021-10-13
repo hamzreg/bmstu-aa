@@ -13,9 +13,9 @@
 
 \section{Средства реализации}
 
-Реализация данной лабораторной работы выполнялась при помощи языка программирования Python. Выбор ЯП обусловлен простотой синтаксиса, большим числом библиотек и эффективностью визуализации данных.
+Реализация данной лабораторной работы выполнялась при помощи языка программирования Python \cite{python}. Выбор ЯП обусловлен простотой синтаксиса, большим числом библиотек и эффективностью визуализации данных.
 
-Замеры времени проводились при помощи функции process\_time из библиотеки time.
+Замеры времени проводились при помощи функции process\_time из библиотеки time \cite{python-time}.
 
 \section{Сведения о модулях программы}
 
@@ -33,6 +33,8 @@
 
 Реализации алгоритмов сортировок выбором, Шелла и гномьей представлены на листингах \ref{lst:selection_sort}, \ref{lst:shell_sort}, \ref{lst:gnome_sort}.
 
+\begin{center}
+\captionsetup{justification=raggedright,singlelinecheck=off}
 \begin{lstlisting}[label=lst:selection_sort,caption=Алгоритм сортировки выбором]
 def selection_sort(arr, size):
     for i in range(size - 1):
@@ -48,7 +50,10 @@ def selection_sort(arr, size):
 
 	return arr
 \end{lstlisting} 
+\end{center}
 
+\begin{center}
+\captionsetup{justification=raggedright,singlelinecheck=off}
 \begin{lstlisting}[label=lst:shell_sort,caption=Алгоритм сортировки Шелла]
 def shell_sort(arr, size):
     d = size // 2
@@ -62,7 +67,10 @@ def shell_sort(arr, size):
 
 	return arr
 \end{lstlisting}
+\end{center}
 
+\begin{center}
+\captionsetup{justification=raggedright,singlelinecheck=off}
 \begin{lstlisting}[label=lst:gnome_sort,caption=Алгоритм гномьей сортировки]
 def gnome_sort(arr, size):
     i = 1
@@ -77,11 +85,12 @@ def gnome_sort(arr, size):
                 i -= 1
 
 	return arr
-\end{lstlisting} 
+\end{lstlisting}
+\end{center}
 
 \section{Функциональные тесты}
 
-В таблице \ref{tbl:func-tests} приведены функциональные тесты, для функций, реализующих алгоритмы сортировок. Все тесты пройдены успешно.
+В таблице \ref{tbl:func-tests} приведены функциональные тесты для функций, реализующих алгоритмы сортировок. Все тесты пройдены успешно.
 
 \begin{table}[h]
 	\begin{center}
