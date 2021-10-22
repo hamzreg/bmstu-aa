@@ -1,0 +1,107 @@
+\chapter{Технологическая часть}
+
+В данном разделе будут указаны средства реализации, будут представлены листинги кода, а также функциональные тесты.
+
+\section{Средства реализации}
+
+Реализация данной лабораторной работы выполнялась при помощи языка программирования Python \cite{python}. Выбор ЯП обусловлен простотой синтаксиса, большим числом библиотек и эффективностью визуализации данных.
+
+Замеры времени проводились при помощи функции process\_time из библиотеки time \cite{python-time}.
+
+\section{Сведения о модулях программы}
+
+Программа состоит из следующих модулей:
+
+\begin{itemize}
+	\item main.py - главный файл программы, предоставляющий пользователю меню для выполнения основных функций;
+	\item sort.py - файл, содержащий функции сортировок массива;
+	\item arr.py - файл, содержащий функции создания массива различного типа и работы с массивом;
+	\item time\_test.py - файл, содержащий функции замеров времени работы сортировок;
+	\item graph\_result.py - файл, содержащий функции визуализации временных характеристик алгоритмов сортировок.
+\end{itemize}
+
+\section{Листинги кода}
+
+Реализации алгоритмов сортировок выбором, Шелла и гномьей представлены на листингах \ref{lst:selection_sort}, \ref{lst:shell_sort}, \ref{lst:gnome_sort}.
+
+\begin{center}
+\captionsetup{justification=raggedright,singlelinecheck=off}
+\begin{lstlisting}[label=lst:selection_sort,caption=Алгоритм сортировки выбором]
+def selection_sort(arr, size):
+    for i in range(size - 1):
+        min_element = arr[i]
+        min_index = i
+
+        for j in range(i + 1, size):
+            if arr[j] < min_element:
+                min_element = arr[j]
+                min_index = j
+        
+        arr[i], arr[min_index] = arr[min_index], arr[i]
+
+	return arr
+\end{lstlisting} 
+\end{center}
+
+\begin{center}
+\captionsetup{justification=raggedright,singlelinecheck=off}
+\begin{lstlisting}[label=lst:shell_sort,caption=Алгоритм сортировки Шелла]
+def shell_sort(arr, size):
+    d = size // 2
+
+    while d > 0:
+        for i in range(0, size):
+            for j in range(i + d, size, d):
+                if arr[i] > arr[j]:
+                    arr[i], arr[j] = arr[j], arr[i]
+        d //= 2
+
+	return arr
+\end{lstlisting}
+\end{center}
+
+\clearpage
+
+\begin{center}
+\captionsetup{justification=raggedright,singlelinecheck=off}
+\begin{lstlisting}[label=lst:gnome_sort,caption=Алгоритм гномьей сортировки]
+def gnome_sort(arr, size):
+    i = 1
+
+    while i < size:
+        if arr[i - 1] <= arr[i]:
+            i += 1
+        else:
+            arr[i - 1], arr[i] = arr[i], arr[i - 1]
+
+            if i > 1:
+                i -= 1
+
+	return arr
+\end{lstlisting}
+\end{center}
+
+\section{Функциональные тесты}
+
+В таблице \ref{tbl:func-tests} приведены функциональные тесты для функций, реализующих алгоритмы сортировок. Все тесты пройдены успешно.
+
+\begin{table}[h]
+	\begin{center}
+		\caption{\label{tbl:func-tests} Функциональные тесты}
+		\begin{tabular}{|c|c|c|}
+			\hline
+			Входной массив & Ожидаемый результат & Результат \\ 
+			\hline
+			$[1, 2, 3, 4, 5, 6]$ & $[1, 2, 3, 4, 5, 6]$  & $[1, 2, 3, 4, 5, 6]$\\
+			$[5, 4, 3, 2, 1]$  & $[1, 2, 3, 4, 5]$ & $[1, 2, 3, 4, 5]$\\
+			$[0, -5, 3, 7, -8]$  & $[-8, -5, 0, 3, 7]$  & $[-8, -5, 0, 3, 7]$\\
+			$[17]$  & $[17]$  & $[17]$\\
+			$[]$  & $[]$  & $[]$\\
+			\hline
+		\end{tabular}
+	\end{center}
+\end{table}
+
+\section*{Вывод}
+
+Были реализованы функции алгоритмов сортировки выбором, Шелла и гномьей. Было проведено функциональное тестирование указанных функций.

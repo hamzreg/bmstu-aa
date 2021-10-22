@@ -8,7 +8,7 @@ from time_test import print_time
 @dataclass
 class Menu:
     """
-        Константы неободимые в меню.
+        Константы необходимые в меню.
     """
     msg = "\n\nМЕНЮ:\n" + \
           "1. Сортировка выбором\n" + \
