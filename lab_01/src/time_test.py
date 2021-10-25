@@ -18,7 +18,7 @@ def get_time_sort(alg, str1, str2):
     """
 
     start = process_time()
-    alg(str1, str2)
+    alg(str1, str2, output = False)
     result = process_time() - start
 
     return result

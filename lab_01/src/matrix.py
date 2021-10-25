@@ -37,14 +37,15 @@ def create_matrix(n, m):
     return matrix
 
 
-def get_random_arr(size):
-    """
-        Случайный массив.
-    """
+def print_matrix(matrix, str1, str2):
+    print("\n0  0  " + "  ".join([let for let in str2]))
 
-    arr = []
+    for i in range(len(str1) + 1):
+        
+        print(str1[i - 1] if (i != 0) else "0", end = "")
 
-    for _ in range(size):
-        arr.append(randint(ARR.low, ARR.top))
+        for j in range(len(str2) + 1):
 
-    return arr
+            print("  " + str(matrix[i][j]), end = "")
+
+        print("")

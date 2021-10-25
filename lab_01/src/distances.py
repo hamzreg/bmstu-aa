@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
-from matrix import create_matrix
+from matrix import create_matrix, print_matrix
+from str import input_strs
 
 @dataclass
 class Cost:
@@ -34,7 +35,7 @@ class Distance:
     damerau_levenshtein = 4
 
 
-def recursive(str1, str2):
+def recursive(str1, str2, output = True):
     """
         Рекурсивная версия
         алгоритма нахождения
@@ -53,10 +54,12 @@ def recursive(str1, str2):
     insertion = recursive(str1, str2[:-1]) + Cost.insertion
     replacement = recursive(str1[:-1], str2[:-1]) + cost_replacement
 
-    return min(deletion, insertion, replacement)
+    min_distance = min(deletion, insertion, replacement)
+
+    return min_distance
 
 
-def matrix_(str1, str2):
+def matrix_(str1, str2, output = True):
     """
         Матричная версия
         алгоритма нахождения
@@ -73,6 +76,9 @@ def matrix_(str1, str2):
             matrix[i][j] = min(matrix[i - 1][j] + Cost.deletion,
                                matrix[i][j - 1] + Cost.insertion,
                                matrix[i - 1][j - 1] + cost_replacement)
+
+    # if output:
+    #     print_matrix(matrix, str1, str2)
     
     return matrix[n][m]
 
@@ -109,7 +115,7 @@ def recursive_(str1, str2, n, m, matrix):
     return matrix[n][m]
 
 
-def recursive_with_cache(str1, str2):
+def recursive_with_cache(str1, str2, output = True):
     """
         Рекурсивная версия
         алгоритма нахождения
@@ -122,10 +128,13 @@ def recursive_with_cache(str1, str2):
 
     recursive_(str1, str2, n, m, matrix)
 
+    # if output:
+    #     print_matrix(matrix, str1, str2)
+
     return matrix[n][m]
 
 
-def damerau_levenshtein(str1, str2):
+def damerau_levenshtein(str1, str2, output = True):
     """
         Рекурсивная версия
         алгоритма нахождения
@@ -144,9 +153,26 @@ def damerau_levenshtein(str1, str2):
     deletion = damerau_levenshtein(str1[:-1], str2) + Cost.deletion
     insertion = damerau_levenshtein(str1, str2[:-1]) + Cost.insertion
     replacement = damerau_levenshtein(str1[:-1], str2[:-1]) + cost_replacement
-    transposition = damerau_levenshtein(str1[:-2], str2[:-2]) + Cost.transposition
 
-    if n > 1 and m > 1 and str1[-1] == str2[-2] and str1[-2] == str1[-1]:
+    if n > 1 and m > 1 and str1[-1] == str2[-2] and str1[-2] == str2[-1]:
+        transposition = damerau_levenshtein(str1[:-2], str2[:-2]) + Cost.transposition
         return min(deletion, insertion, replacement, transposition)
 
     return min(deletion, insertion, replacement)
+
+
+def test_all():
+    """
+        Тест всех алгоритмов.
+    """
+
+    str1, str2 = input_strs()
+
+    distance = recursive(str1, str2)
+    print("Рекурсивный алгоритм Левенштейна:", distance)
+    distance = matrix_(str1, str2)
+    print("Матричный алгоритм Левенштейна:", distance)
+    distance = recursive_with_cache(str1, str2)
+    print("Рекурсивный алгоритм Левенштейна с использованием матрицы:", distance)
+    distance = damerau_levenshtein(str1, str2)
+    print("Рекурсивный алгоритм Дамерау-Левенштейна:", distance)

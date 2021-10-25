@@ -1,3 +1,6 @@
+# Executable files
+*.pyc
+
 # Latex auxiliary files
 *.aux
 *.log

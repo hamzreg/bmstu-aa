@@ -19,6 +19,7 @@ class Menu:
           "     4 - рекурсивного алгоритма.\n" + \
           "     5 - Построить графики.\n" + \
           "     6 - Замерить время.\n" + \
+          "     7 - Найти расстояние при помощи всех алгоритмов.\n" + \
           "     0 - Выход.\n" + \
           "Выбор: "
 
@@ -29,6 +30,7 @@ class Menu:
     damerau_levenshtein = 4
     plot = 5
     measure = 6
+    all_alg = 7
 
 
 def process():
@@ -50,6 +52,8 @@ def process():
             get_graph_result()
         elif command == Menu.measure:
             print_time()
+        elif command == Menu.all_alg:
+            test_all()
         else:
             process = False
             
