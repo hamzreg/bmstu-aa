@@ -1,25 +1,6 @@
 from dataclasses import dataclass
 from random import randint
 
-@dataclass
-class ARR:
-    """
-        Константы для выбора типа массива.
-    """
-
-    msg = "\n\nТип массива:\n" + \
-          "1 - отсортированный\n" + \
-          "2 - отсортированный в обратном порядке\n" + \
-          "3 - случайный\n" + \
-          "Выбор: "
-    
-    sorted = 1
-    reversed = 2
-    randomed = 3
-
-    low = -1000
-    top = 1000
-
 
 def create_matrix(n, m):
     """

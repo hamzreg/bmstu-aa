@@ -26,6 +26,10 @@ def find_distance(algorithm):
 
 
 def get_random_string(len):
+    """
+        Создание случайной строки.
+    """
+
     letters = string.ascii_lowercase
 
     return "".join(choice(letters) for _ in range(len))

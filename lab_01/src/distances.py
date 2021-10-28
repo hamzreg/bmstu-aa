@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from matrix import create_matrix, print_matrix
+from matrix import *
 from str import input_strs
 
 @dataclass
@@ -35,7 +35,7 @@ class Distance:
     damerau_levenshtein = 4
 
 
-def recursive(str1, str2, output = True):
+def recursive(str1, str2):
     """
         Рекурсивная версия
         алгоритма нахождения
@@ -59,7 +59,7 @@ def recursive(str1, str2, output = True):
     return min_distance
 
 
-def matrix_(str1, str2, output = True):
+def matrix_(str1, str2, output = False):
     """
         Матричная версия
         алгоритма нахождения
@@ -77,8 +77,8 @@ def matrix_(str1, str2, output = True):
                                matrix[i][j - 1] + Cost.insertion,
                                matrix[i - 1][j - 1] + cost_replacement)
 
-    # if output:
-    #     print_matrix(matrix, str1, str2)
+    if not output:
+        print_matrix(matrix, str1, str2)
     
     return matrix[n][m]
 
@@ -115,7 +115,7 @@ def recursive_(str1, str2, n, m, matrix):
     return matrix[n][m]
 
 
-def recursive_with_cache(str1, str2, output = True):
+def recursive_with_cache(str1, str2, output = False):
     """
         Рекурсивная версия
         алгоритма нахождения
@@ -128,13 +128,13 @@ def recursive_with_cache(str1, str2, output = True):
 
     recursive_(str1, str2, n, m, matrix)
 
-    if output:
+    if not output:
         print_matrix(matrix, str1, str2)
 
     return matrix[n][m]
 
 
-def damerau_levenshtein(str1, str2, output = True):
+def damerau_levenshtein(str1, str2):
     """
         Рекурсивная версия
         алгоритма нахождения
