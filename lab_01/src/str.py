@@ -22,7 +22,7 @@ def find_distance(algorithm):
 
     distance = algorithm(str1, str2)
 
-    print("Полученное редакционное расстояние:", distance)
+    print("\nПолученное редакционное расстояние:", distance)
 
 
 def get_random_string(len):

@@ -128,8 +128,8 @@ def recursive_with_cache(str1, str2, output = True):
 
     recursive_(str1, str2, n, m, matrix)
 
-    # if output:
-    #     print_matrix(matrix, str1, str2)
+    if output:
+        print_matrix(matrix, str1, str2)
 
     return matrix[n][m]
 

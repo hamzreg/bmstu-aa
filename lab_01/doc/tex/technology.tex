@@ -8,100 +8,154 @@
 
 Замеры времени проводились при помощи функции process\_time из библиотеки time \cite{python-time}.
 
-\section{Сведения о модулях программы}
-
-Программа состоит из следующих модулей:
-
-\begin{itemize}
-	\item main.py - главный файл программы, предоставляющий пользователю меню для выполнения основных функций;
-	\item sort.py - файл, содержащий функции сортировок массива;
-	\item arr.py - файл, содержащий функции создания массива различного типа и работы с массивом;
-	\item time\_test.py - файл, содержащий функции замеров времени работы сортировок;
-	\item graph\_result.py - файл, содержащий функции визуализации временных характеристик алгоритмов сортировок.
-\end{itemize}
-
 \section{Листинги кода}
 
-Реализации алгоритмов сортировок выбором, Шелла и гномьей представлены на листингах \ref{lst:selection_sort}, \ref{lst:shell_sort}, \ref{lst:gnome_sort}.
-
+Реализации алгоритмов нахождения расстояния Левенштейна и расстояния Дамерау-Левенштейна представлены в листингах \ref{lst:recursive}-\ref{lst:dl}.
+\clearpage
 \begin{center}
 \captionsetup{justification=raggedright,singlelinecheck=off}
-\begin{lstlisting}[label=lst:selection_sort,caption=Алгоритм сортировки выбором]
-def selection_sort(arr, size):
-    for i in range(size - 1):
-        min_element = arr[i]
-        min_index = i
+\begin{lstlisting}[label=lst:recursive,caption=Рекурсивный алгоритм нахождения расстояния Левенштейна]
+def recursive(str1, str2):
+    n = len(str1)
+    m = len(str2)
 
-        for j in range(i + 1, size):
-            if arr[j] < min_element:
-                min_element = arr[j]
-                min_index = j
-        
-        arr[i], arr[min_index] = arr[min_index], arr[i]
+    if n == 0 or m == 0:
+        return abs(n - m)
 
-	return arr
+    cost_replacement = Cost.replacement if str1[-1] != str2[-1] else 0
+
+    deletion = recursive(str1[:-1], str2) + Cost.deletion
+    insertion = recursive(str1, str2[:-1]) + Cost.insertion
+    replacement = recursive(str1[:-1], str2[:-1]) + cost_replacement
+
+    min_distance = min(deletion, insertion, replacement)
+
+    return min_distance
 \end{lstlisting} 
 \end{center}
 
 \begin{center}
 \captionsetup{justification=raggedright,singlelinecheck=off}
-\begin{lstlisting}[label=lst:shell_sort,caption=Алгоритм сортировки Шелла]
-def shell_sort(arr, size):
-    d = size // 2
+\begin{lstlisting}[label=lst:matrix,caption=Матричный алгоритм нахождения расстояния Левенштейна]
+def matrix_(str1, str2):
+    n, m = len(str1), len(str2)
+    matrix = create_matrix(n + 1, m + 1)
 
-    while d > 0:
-        for i in range(0, size):
-            for j in range(i + d, size, d):
-                if arr[i] > arr[j]:
-                    arr[i], arr[j] = arr[j], arr[i]
-        d //= 2
+    for i in range(1, n + 1):
+        for j in range(1, m + 1):
 
-	return arr
+            cost_replacement = Cost.replacement if str1[-1] != str2[-1] else 0
+            matrix[i][j] = min(matrix[i - 1][j] + Cost.deletion,
+                               matrix[i][j - 1] + Cost.insertion,
+                               matrix[i - 1][j - 1] + cost_replacement)
+
+    return matrix[n][m]
 \end{lstlisting}
 \end{center}
-
 \clearpage
-
 \begin{center}
 \captionsetup{justification=raggedright,singlelinecheck=off}
-\begin{lstlisting}[label=lst:gnome_sort,caption=Алгоритм гномьей сортировки]
-def gnome_sort(arr, size):
-    i = 1
+\begin{lstlisting}[label=lst:cache,caption=Алгоритм нахождения расстояния Левенштейна с использованием матрицы]
+def recursive_(str1, str2, n, m, matrix):
+    if matrix[n][m] != -1:
+        return matrix[n][m]
 
-    while i < size:
-        if arr[i - 1] <= arr[i]:
-            i += 1
-        else:
-            arr[i - 1], arr[i] = arr[i], arr[i - 1]
+    if n == 0:
+        matrix[n][m] = m
+        return matrix[n][m]
+    
+    if n > 0 and m == 0:
+        matrix[n][m] = n
+        return matrix[n][m]
 
-            if i > 1:
-                i -= 1
+    cost_replacement = Cost.replacement if str1[n - 1] != str2[m - 1] else 0
 
-	return arr
+    deletion = recursive_(str1, str2, n - 1, m, matrix) + Cost.deletion
+    insertion = recursive_(str1, str2, n, m - 1, matrix) + Cost.insertion
+    replacement = recursive_(str1, str2, n - 1, m - 1, matrix) + cost_replacement
+    
+    matrix[n][m] = min(deletion,
+                       insertion,
+                       replacement)
+
+    return matrix[n][m]
+
+
+def recursive_with_cache(str1, str2):
+    n, m = len(str1), len(str2)
+    matrix = [[-1] * (m + 1) for _ in range(n + 1)]
+
+    recursive_(str1, str2, n, m, matrix)
+
+    return matrix[n][m]
 \end{lstlisting}
+\end{center}
+\clearpage
+\begin{center}
+\captionsetup{justification=raggedright,singlelinecheck=off}
+\begin{lstlisting}[label=lst:dl,caption=Рекурсивный алгоритм нахождения расстояния Дамерау-Левенштейна]
+def damerau_levenshtein(str1, str2):
+    n = len(str1)
+    m = len(str2)
+
+    if n == 0 or m == 0:
+        return abs(n - m)
+
+    cost_replacement = Cost.replacement if str1[-1] != str2[-1] else 0
+
+    deletion = damerau_levenshtein(str1[:-1], str2) + Cost.deletion
+    insertion = damerau_levenshtein(str1, str2[:-1]) + Cost.insertion
+    replacement = damerau_levenshtein(str1[:-1], str2[:-1]) + cost_replacement
+
+    if n > 1 and m > 1 and str1[-1] == str2[-2] and str1[-2] == str2[-1]:
+        transposition = damerau_levenshtein(str1[:-2], str2[:-2]) + Cost.transposition
+        return min(deletion, insertion, replacement, transposition)
+
+    return min(deletion, insertion, replacement)
+\end{lstlisting} 
 \end{center}
 
 \section{Функциональные тесты}
 
-В таблице \ref{tbl:func-tests} приведены функциональные тесты для функций, реализующих алгоритмы сортировок. Все тесты пройдены успешно.
+В таблице \ref{tbl:func_test} приведены функциональные тесты для функций, реализующих алгоритмы нахождения редакционного расстояния. Все тесты пройдены успешно.
 
 \begin{table}[h]
 	\begin{center}
-		\caption{\label{tbl:func-tests} Функциональные тесты}
-		\begin{tabular}{|c|c|c|}
+        \begin{threeparttable}
+        \captionsetup{justification=raggedright,singlelinecheck=off}
+		\caption{\label{tbl:func_test} Функциональные тесты}
+		\begin{tabular}{|c|c|c|c|c|}
 			\hline
-			Входной массив & Ожидаемый результат & Результат \\ 
+			& & & \multicolumn{2}{c|}{Ожидаемый результат} \\
 			\hline
-			$[1, 2, 3, 4, 5, 6]$ & $[1, 2, 3, 4, 5, 6]$  & $[1, 2, 3, 4, 5, 6]$\\
-			$[5, 4, 3, 2, 1]$  & $[1, 2, 3, 4, 5]$ & $[1, 2, 3, 4, 5]$\\
-			$[0, -5, 3, 7, -8]$  & $[-8, -5, 0, 3, 7]$  & $[-8, -5, 0, 3, 7]$\\
-			$[17]$  & $[17]$  & $[17]$\\
-			$[]$  & $[]$  & $[]$\\
+			№&Строка 1&Строка 2&Левенштейн&Дамерау-Левенштейн\\
+			\hline
+            1&"пустая строка"&"пустая строка"&0&0 \\
+            \hline
+            2&"пустая строка"&привет&6&6 \\
+            \hline
+            3&солнышко&"пустая строка"&8&8 \\
+            \hline
+            4&улыбка&улыбк&1&1 \\
+			\hline
+			5&рай&раааай&3&3 \\
+			\hline
+            6&аромат&игра&5&5 \\
+			\hline
+			7&душа&счастье&7&7 \\
+			\hline
+			8&закат&азкта&4&2 \\
+			\hline
+			9&мир&рим&2&2 \\
+			\hline
+			10&оскар&окр&2&2 \\
 			\hline
 		\end{tabular}
+        \end{threeparttable}
 	\end{center}
 \end{table}
 
-\section*{Вывод}
 
-Были реализованы функции алгоритмов сортировки выбором, Шелла и гномьей. Было проведено функциональное тестирование указанных функций.
+\section{Вывод}
+
+Были реализованы функции алгоритмов поиска редакционного расстояния. Было проведено функциональное тестирование указанных функций.
