@@ -1,47 +1,49 @@
+% Текст 
+\usepackage[english,russian]{babel} % Языки
+
 \usepackage{cmap} % Улучшенный поиск русских слов в полученном pdf-файле
 \usepackage[T2A]{fontenc} % Поддержка русских букв
 \usepackage[utf8]{inputenc} % Кодировка utf8
-\usepackage[english,russian]{babel} % Языки: русский, английский
-%\usepackage{pscyr} % Нормальные шрифты
-\usepackage{enumitem}
 
-\usepackage[14pt]{extsizes}
+\usepackage[14pt]{extsizes} % Установка 14pt (без этого тоже работает)
 
-\usepackage{caption}
-\captionsetup{labelsep=endash}
-\captionsetup[figure]{name={Рисунок}}
 
-\usepackage{amsmath}
-
+% Поля
 \usepackage{geometry}
 \geometry{left=30mm}
 \geometry{right=15mm}
 \geometry{top=20mm}
 \geometry{bottom=20mm}
 
+
+% Заголовки
 \usepackage{titlesec}
-\titleformat{\section}
-	{\normalsize\bfseries}
-	{\thesection}
-	{1em}{}
+
+\titleformat{\section}{\normalsize\bfseries}
+{\thesection}{1em}{}
+
 \titlespacing*{\chapter}{0pt}{-30pt}{8pt}
 \titlespacing*{\section}{\parindent}{*4}{*4}
 \titlespacing*{\subsection}{\parindent}{*4}{*4}
-
-\usepackage{setspace}
-\onehalfspacing % Полуторный интервал
-
-\frenchspacing
-\usepackage{indentfirst} % Красная строка
 
 \usepackage{titlesec}
 \titleformat{\chapter}{\LARGE\bfseries}{\thechapter}{20pt}{\LARGE\bfseries}
 \titleformat{\section}{\Large\bfseries}{\thesection}{20pt}{\Large\bfseries}
 
+
+% Интервал
+\usepackage{setspace}
+\onehalfspacing % Полуторный интервал
+
+% Абзацный отступ
+\frenchspacing
+\usepackage{indentfirst}
+
+
+% Листинг кода [Python]:
 \usepackage{listings}
 \usepackage{xcolor}
 
-% Для листинга кода:
 \lstset{ %
 	language=python,   					% выбор языка для подсветки	
 	basicstyle=\small\sffamily,			% размер и начертание шрифта для подсветки кода
@@ -58,18 +60,23 @@
 	backgroundcolor=\color{white},
 }
 
-\usepackage[justification=centering]{caption} % Настройка подписей float объектов
 
+% PDF
+\usepackage[justification=centering]{caption} % Настройка подписей float объектов
 \usepackage[unicode,pdftex]{hyperref} % Ссылки в pdf
 \hypersetup{hidelinks}
 
-\usepackage{csvsimple}
 
+% Подписи
+\captionsetup{labelsep=endash} % Объект - описание
 
-
-\newcommand{\code}[1]{\texttt{#1}}
+% Таблицы
+\usepackage{threeparttable}
 
 % Рисунки
+\usepackage{caption}
+\captionsetup[figure]{name={Рисунок}} % Рис. -> Рисунок
+
 \usepackage{float}
 \usepackage[justification=centering]{caption}
 \usepackage{pgfplots}
@@ -92,4 +99,7 @@
     \end{figure}
 }
 
-\usepackage{threeparttable}
+
+% Формулы
+\usepackage{amsmath}
+\newcommand{\code}[1]{\texttt{#1}} % Шрифт пишущей машинки в формулах
