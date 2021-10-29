@@ -1,5 +1,6 @@
 from random import choice
 import string
+from distances import Distance
 
 def input_strs():
     """
@@ -12,7 +13,7 @@ def input_strs():
     return str1, str2
 
 
-def find_distance(algorithm):
+def find_distance(algorithm, type):
     """
         Нахождение редакционного
         расстояния.
@@ -20,7 +21,10 @@ def find_distance(algorithm):
 
     str1, str2 = input_strs()
 
-    distance = algorithm(str1, str2)
+    if type == Distance.matrix or type == Distance.recursion_with_matrix:
+        distance = algorithm(str1, str2, output = True)
+    else:
+        distance = algorithm(str1, str2)
 
     print("\nПолученное редакционное расстояние:", distance)
 

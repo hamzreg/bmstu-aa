@@ -1,7 +1,6 @@
 from dataclasses import dataclass
 
 from matrix import *
-from str import input_strs
 
 @dataclass
 class Cost:
@@ -72,12 +71,12 @@ def matrix_(str1, str2, output = False):
     for i in range(1, n + 1):
         for j in range(1, m + 1):
 
-            cost_replacement = Cost.replacement if str1[-1] != str2[-1] else 0
+            cost_replacement = Cost.replacement if str1[i - 1] != str2[j - 1] else 0
             matrix[i][j] = min(matrix[i - 1][j] + Cost.deletion,
                                matrix[i][j - 1] + Cost.insertion,
                                matrix[i - 1][j - 1] + cost_replacement)
 
-    if not output:
+    if output:
         print_matrix(matrix, str1, str2)
     
     return matrix[n][m]
@@ -128,7 +127,7 @@ def recursive_with_cache(str1, str2, output = False):
 
     recursive_(str1, str2, n, m, matrix)
 
-    if not output:
+    if output:
         print_matrix(matrix, str1, str2)
 
     return matrix[n][m]
@@ -159,20 +158,3 @@ def damerau_levenshtein(str1, str2):
         return min(deletion, insertion, replacement, transposition)
 
     return min(deletion, insertion, replacement)
-
-
-def test_all():
-    """
-        Тест всех алгоритмов.
-    """
-
-    str1, str2 = input_strs()
-
-    distance = recursive(str1, str2)
-    print("Рекурсивный алгоритм Левенштейна:", distance)
-    distance = matrix_(str1, str2)
-    print("Матричный алгоритм Левенштейна:", distance)
-    distance = recursive_with_cache(str1, str2)
-    print("Рекурсивный алгоритм Левенштейна с использованием матрицы:", distance)
-    distance = damerau_levenshtein(str1, str2)
-    print("Рекурсивный алгоритм Дамерау-Левенштейна:", distance)
