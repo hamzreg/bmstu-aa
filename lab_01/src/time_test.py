@@ -12,7 +12,7 @@ class TimeTest:
     iters = 100
 
 
-def get_time_sort(alg, str1, str2):
+def get_time_alg(alg, str1, str2):
     """
         Замер времени алгоритма.
     """
@@ -41,7 +41,7 @@ def time_test(type1, type2):
             for _ in range(TimeTest.iters):
                 str1 = get_random_string(len)
                 str2 = get_random_string(len)
-                result += get_time_sort(alg[1], str1, str2)
+                result += get_time_alg(alg[1], str1, str2)
 
             print("Progress:\t", len * 10, "%")
 
@@ -53,8 +53,8 @@ def time_test(type1, type2):
 def measure_time():
     """
         Проведение временных замеров 
-        работы алгоритмов сортировки  
-        для массива определенного типа.
+        работы алгоритмов нахождения
+        редакционного расстояния.
     """
 
     type1 = int(input(Distance.msg))

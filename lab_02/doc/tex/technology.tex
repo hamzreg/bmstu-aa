@@ -1,0 +1,161 @@
+\chapter{Технологическая часть}
+
+В данном разделе будут указаны средства реализации, будут представлены листинги кода, а также функциональные тесты.
+
+\section{Средства реализации}
+
+Реализация данной лабораторной работы выполнялась при помощи языка программирования Python \cite{python}. Выбор ЯП обусловлен простотой синтаксиса, большим числом библиотек и эффективностью визуализации данных.
+
+Замеры времени проводились при помощи функции process\_time из библиотеки time \cite{python-time}.
+
+\section{Листинги кода}
+
+Реализации алгоритмов нахождения расстояния Левенштейна и расстояния Дамерау-Левенштейна представлены в листингах \ref{lst:recursive}-\ref{lst:dl}.
+\clearpage
+\begin{center}
+\captionsetup{justification=raggedright,singlelinecheck=off}
+\begin{lstlisting}[label=lst:recursive,caption=Рекурсивный алгоритм нахождения расстояния Левенштейна]
+def recursive(str1, str2):
+    n = len(str1)
+    m = len(str2)
+
+    if n == 0 or m == 0:
+        return abs(n - m)
+
+    cost_replacement = Cost.replacement if str1[-1] != str2[-1] else 0
+
+    deletion = recursive(str1[:-1], str2) + Cost.deletion
+    insertion = recursive(str1, str2[:-1]) + Cost.insertion
+    replacement = recursive(str1[:-1], str2[:-1]) + cost_replacement
+
+    min_distance = min(deletion, insertion, replacement)
+
+    return min_distance
+\end{lstlisting} 
+\end{center}
+
+\begin{center}
+\captionsetup{justification=raggedright,singlelinecheck=off}
+\begin{lstlisting}[label=lst:matrix,caption=Матричный алгоритм нахождения расстояния Левенштейна]
+def matrix_(str1, str2):
+    n, m = len(str1), len(str2)
+    matrix = create_matrix(n + 1, m + 1)
+
+    for i in range(1, n + 1):
+        for j in range(1, m + 1):
+
+            cost_replacement = Cost.replacement if str1[-1] != str2[-1] else 0
+            matrix[i][j] = min(matrix[i - 1][j] + Cost.deletion,
+                               matrix[i][j - 1] + Cost.insertion,
+                               matrix[i - 1][j - 1] + cost_replacement)
+
+    return matrix[n][m]
+\end{lstlisting}
+\end{center}
+\clearpage
+\begin{center}
+\captionsetup{justification=raggedright,singlelinecheck=off}
+\begin{lstlisting}[label=lst:cache,caption=Алгоритм нахождения расстояния Левенштейна с использованием матрицы]
+def recursive_(str1, str2, n, m, matrix):
+    if matrix[n][m] != -1:
+        return matrix[n][m]
+
+    if n == 0:
+        matrix[n][m] = m
+        return matrix[n][m]
+    
+    if n > 0 and m == 0:
+        matrix[n][m] = n
+        return matrix[n][m]
+
+    cost_replacement = Cost.replacement if str1[n - 1] != str2[m - 1] else 0
+
+    deletion = recursive_(str1, str2, n - 1, m, matrix) + Cost.deletion
+    insertion = recursive_(str1, str2, n, m - 1, matrix) + Cost.insertion
+    replacement = recursive_(str1, str2, n - 1, m - 1, matrix) + cost_replacement
+    
+    matrix[n][m] = min(deletion,
+                       insertion,
+                       replacement)
+
+    return matrix[n][m]
+
+
+def recursive_with_cache(str1, str2):
+    n, m = len(str1), len(str2)
+    matrix = [[-1] * (m + 1) for _ in range(n + 1)]
+
+    recursive_(str1, str2, n, m, matrix)
+
+    return matrix[n][m]
+\end{lstlisting}
+\end{center}
+\clearpage
+\begin{center}
+\captionsetup{justification=raggedright,singlelinecheck=off}
+\begin{lstlisting}[label=lst:dl,caption=Рекурсивный алгоритм нахождения расстояния Дамерау-Левенштейна]
+def damerau_levenshtein(str1, str2):
+    n = len(str1)
+    m = len(str2)
+
+    if n == 0 or m == 0:
+        return abs(n - m)
+
+    cost_replacement = Cost.replacement if str1[-1] != str2[-1] else 0
+
+    deletion = damerau_levenshtein(str1[:-1], str2) + Cost.deletion
+    insertion = damerau_levenshtein(str1, str2[:-1]) + Cost.insertion
+    replacement = damerau_levenshtein(str1[:-1], str2[:-1]) + cost_replacement
+
+    if n > 1 and m > 1 and str1[-1] == str2[-2] and str1[-2] == str2[-1]:
+        transposition = damerau_levenshtein(str1[:-2], str2[:-2]) + Cost.transposition
+        return min(deletion, insertion, replacement, transposition)
+
+    return min(deletion, insertion, replacement)
+\end{lstlisting} 
+\end{center}
+
+\section{Функциональные тесты}
+
+В таблице \ref{tbl:func_test} приведены функциональные тесты для функций, реализующих алгоритмы нахождения редакционного расстояния. Все тесты пройдены успешно.
+
+\begin{table}[h]
+	\begin{center}
+        \begin{threeparttable}
+        \captionsetup{justification=raggedright,singlelinecheck=off}
+		\caption{\label{tbl:func_test} Функциональные тесты}
+		\begin{tabular}{|c|c|c|c|c|}
+			\hline
+			& & & \multicolumn{2}{c|}{Ожидаемый результат} \\
+			\hline
+			№&Строка 1&Строка 2&Левенштейн&Дамерау-Левенштейн\\
+			\hline
+            1&"пустая строка"&"пустая строка"&0&0 \\
+            \hline
+            2&"пустая строка"&привет&6&6 \\
+            \hline
+            3&солнышко&"пустая строка"&8&8 \\
+            \hline
+            4&улыбка&улыбк&1&1 \\
+			\hline
+			5&рай&раааай&3&3 \\
+			\hline
+            6&аромат&игра&5&5 \\
+			\hline
+			7&душа&счастье&7&7 \\
+			\hline
+			8&закат&азкта&4&2 \\
+			\hline
+			9&мир&рим&2&2 \\
+			\hline
+			10&оскар&окр&2&2 \\
+			\hline
+		\end{tabular}
+        \end{threeparttable}
+	\end{center}
+\end{table}
+
+
+\section{Вывод}
+
+Были реализованы функции алгоритмов поиска редакционного расстояния. Было проведено функциональное тестирование указанных функций.
