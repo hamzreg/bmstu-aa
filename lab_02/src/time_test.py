@@ -98,8 +98,8 @@ def print_time():
 
     for size in range(start, stop, TimeTest.step):
         print(" %4d & %.4f & %.4f & %.4f \\\\ \n \\hline" %(size, \
-            results[0][i] * TimeTest.to_ms, \
             results[1][i] * TimeTest.to_ms, \
+            results[0][i] * TimeTest.to_ms, \
             results[2][i] * TimeTest.to_ms))
 
         i += 1

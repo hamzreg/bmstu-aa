@@ -10,152 +10,112 @@
 
 \section{Листинги кода}
 
-Реализации алгоритмов нахождения расстояния Левенштейна и расстояния Дамерау-Левенштейна представлены в листингах \ref{lst:recursive}-\ref{lst:dl}.
-\clearpage
+Стандартный алгоритм, алгоритм Винограда и оптимизированный алгоритм Винограда умножения матриц приведены в листингах \ref{lst:standard}-\ref{lst:optimized}.
+
 \begin{center}
 \captionsetup{justification=raggedright,singlelinecheck=off}
-\begin{lstlisting}[label=lst:recursive,caption=Рекурсивный алгоритм нахождения расстояния Левенштейна]
-def recursive(str1, str2):
-    n = len(str1)
-    m = len(str2)
+\begin{lstlisting}[label=lst:standard,caption=Стандартный алгоритм умножения матриц]
+def standard_mult(A, B):
+    n = len(A)
+    m = len(B[0])
+    p = len(A[0])
 
-    if n == 0 or m == 0:
-        return abs(n - m)
+    C = [[0] * m for i in range(n)]
 
-    cost_replacement = Cost.replacement if str1[-1] != str2[-1] else 0
+    for i in range(n):
+        for j in range(m):
+            for k in range(p):
+                C[i][j] += A[i][k] * B[k][j]
 
-    deletion = recursive(str1[:-1], str2) + Cost.deletion
-    insertion = recursive(str1, str2[:-1]) + Cost.insertion
-    replacement = recursive(str1[:-1], str2[:-1]) + cost_replacement
-
-    min_distance = min(deletion, insertion, replacement)
-
-    return min_distance
+    return C
 \end{lstlisting} 
 \end{center}
 
 \begin{center}
 \captionsetup{justification=raggedright,singlelinecheck=off}
-\begin{lstlisting}[label=lst:matrix,caption=Матричный алгоритм нахождения расстояния Левенштейна]
-def matrix_(str1, str2):
-    n, m = len(str1), len(str2)
-    matrix = create_matrix(n + 1, m + 1)
+\begin{lstlisting}[label=lst:winograd,caption=Алгоритм Винограда умножения матриц]
+def winograd_mult(A, B):
+    n = len(A)
+    m = len(B[0])
+    p = len(A[0])
 
-    for i in range(1, n + 1):
-        for j in range(1, m + 1):
+    C = [[0] * m for _ in range(n)]
 
-            cost_replacement = Cost.replacement if str1[-1] != str2[-1] else 0
-            matrix[i][j] = min(matrix[i - 1][j] + Cost.deletion,
-                               matrix[i][j - 1] + Cost.insertion,
-                               matrix[i - 1][j - 1] + cost_replacement)
+    row_factors = [0] * n
 
-    return matrix[n][m]
+    for i in range(n):
+        for j in range(p // 2):
+            row_factors[i] = row_factors[i] + \
+                             A[i][2 * j] * A[i][2 * j + 1]
+
+    column_factors = [0] * m
+
+    for i in range(m):
+        for j in range(p // 2):
+            column_factors[i] = column_factors[i] + \
+                                B[2 * j][i] * B[2 * j + 1][i]
+
+    for i in range(n):
+        for j in range(m):
+            C[i][j] = -row_factors[i] - column_factors[j]
+
+            for k in range(p // 2):
+                C[i][j] = C[i][j] + (A[i][2 * k + 1] + B[2 * k][j]) * \
+                                    (A[i][2 * k] + B[2 * k + 1][j])
+    
+    if p % 2 != 0:
+        for i in range(n):
+            for j in range(m):
+                C[i][j] = C[i][j] + A[i][p - 1] * B[p - 1][j]
+    
+    return C
 \end{lstlisting}
 \end{center}
-\clearpage
+
 \begin{center}
 \captionsetup{justification=raggedright,singlelinecheck=off}
-\begin{lstlisting}[label=lst:cache,caption=Алгоритм нахождения расстояния Левенштейна с использованием матрицы]
-def recursive_(str1, str2, n, m, matrix):
-    if matrix[n][m] != -1:
-        return matrix[n][m]
+\begin{lstlisting}[label=lst:optimized,caption=Оптимизированный алгоритм Винограда умножения матриц]
+def optimized_winograd_mult(A, B):
+    n = len(A)
+    m = len(B[0])
+    p = len(A[0])
 
-    if n == 0:
-        matrix[n][m] = m
-        return matrix[n][m]
+    C = [[0] * m for _ in range(n)]
+
+    row_factors = [0] * n
+
+    for i in range(n):
+        for j in range(1, p, 2):
+            row_factors[i] += A[i][j] * A[i][j - 1]
+
+    column_factors = [0] * m
+
+    for i in range(m):
+        for j in range(1, p, 2):
+            column_factors[i] += B[j][i] * B[j - 1][i]
+
+    flag = p % 2
+
+    for i in range(n):
+        for j in range(m):
+            C[i][j] = -(row_factors[i] + column_factors[j])
+
+            for k in range(1, p, 2):
+                C[i][j] += (A[i][k - 1] + B[k][j]) * \
+                                    (A[i][k] + B[k - 1][j])
     
-    if n > 0 and m == 0:
-        matrix[n][m] = n
-        return matrix[n][m]
-
-    cost_replacement = Cost.replacement if str1[n - 1] != str2[m - 1] else 0
-
-    deletion = recursive_(str1, str2, n - 1, m, matrix) + Cost.deletion
-    insertion = recursive_(str1, str2, n, m - 1, matrix) + Cost.insertion
-    replacement = recursive_(str1, str2, n - 1, m - 1, matrix) + cost_replacement
+            if flag:
+                C[i][j] += A[i][p - 1] * B[p - 1][j]
     
-    matrix[n][m] = min(deletion,
-                       insertion,
-                       replacement)
-
-    return matrix[n][m]
-
-
-def recursive_with_cache(str1, str2):
-    n, m = len(str1), len(str2)
-    matrix = [[-1] * (m + 1) for _ in range(n + 1)]
-
-    recursive_(str1, str2, n, m, matrix)
-
-    return matrix[n][m]
+    return C
 \end{lstlisting}
-\end{center}
-\clearpage
-\begin{center}
-\captionsetup{justification=raggedright,singlelinecheck=off}
-\begin{lstlisting}[label=lst:dl,caption=Рекурсивный алгоритм нахождения расстояния Дамерау-Левенштейна]
-def damerau_levenshtein(str1, str2):
-    n = len(str1)
-    m = len(str2)
-
-    if n == 0 or m == 0:
-        return abs(n - m)
-
-    cost_replacement = Cost.replacement if str1[-1] != str2[-1] else 0
-
-    deletion = damerau_levenshtein(str1[:-1], str2) + Cost.deletion
-    insertion = damerau_levenshtein(str1, str2[:-1]) + Cost.insertion
-    replacement = damerau_levenshtein(str1[:-1], str2[:-1]) + cost_replacement
-
-    if n > 1 and m > 1 and str1[-1] == str2[-2] and str1[-2] == str2[-1]:
-        transposition = damerau_levenshtein(str1[:-2], str2[:-2]) + Cost.transposition
-        return min(deletion, insertion, replacement, transposition)
-
-    return min(deletion, insertion, replacement)
-\end{lstlisting} 
 \end{center}
 
 \section{Функциональные тесты}
 
-В таблице \ref{tbl:func_test} приведены функциональные тесты для функций, реализующих алгоритмы нахождения редакционного расстояния. Все тесты пройдены успешно.
-
-\begin{table}[h]
-	\begin{center}
-        \begin{threeparttable}
-        \captionsetup{justification=raggedright,singlelinecheck=off}
-		\caption{\label{tbl:func_test} Функциональные тесты}
-		\begin{tabular}{|c|c|c|c|c|}
-			\hline
-			& & & \multicolumn{2}{c|}{Ожидаемый результат} \\
-			\hline
-			№&Строка 1&Строка 2&Левенштейн&Дамерау-Левенштейн\\
-			\hline
-            1&"пустая строка"&"пустая строка"&0&0 \\
-            \hline
-            2&"пустая строка"&привет&6&6 \\
-            \hline
-            3&солнышко&"пустая строка"&8&8 \\
-            \hline
-            4&улыбка&улыбк&1&1 \\
-			\hline
-			5&рай&раааай&3&3 \\
-			\hline
-            6&аромат&игра&5&5 \\
-			\hline
-			7&душа&счастье&7&7 \\
-			\hline
-			8&закат&азкта&4&2 \\
-			\hline
-			9&мир&рим&2&2 \\
-			\hline
-			10&оскар&окр&2&2 \\
-			\hline
-		\end{tabular}
-        \end{threeparttable}
-	\end{center}
-\end{table}
+В таблице \ref{tbl:func_test} приведены функциональные тесты для функций, реализующих алгоритмы умножения матриц. Все тесты пройдены успешно.
 
 
 \section{Вывод}
 
-Были реализованы функции алгоритмов поиска редакционного расстояния. Было проведено функциональное тестирование указанных функций.
+Были реализованы функции алгоритмов умножения матриц. Было проведено функциональное тестирование указанных функций.
