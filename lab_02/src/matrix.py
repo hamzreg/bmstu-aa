@@ -24,16 +24,30 @@ def input_matrix():
         Ввод матрицы.
     """
 
-    n = int(input("Введите число строк: "))
-    m = int(input("Введите число столбцов: "))
+    try:
+        n = int(input("Введите число строк: "))
+        m = int(input("Введите число столбцов: "))
+
+        if n < 1 or m < 1:
+            print("\nОшибка! Размерность матрицы должна быть больше 0!")
+            return []
+    except:
+        print("\nОшибка! Введено не число!")
+        return []
+
+    print("Введите элементы матрицы по одному в строке:")
     matrix = []
 
     for i in range(n):
         matrix.append([])
 
         for _ in range(m):
-            elem = int(input())
-            matrix[i].append(elem)
+            try:
+                elem = int(input())
+                matrix[i].append(elem)
+            except:
+                print("\nОшибка! Введено не число!")
+                return []
     
     return matrix
 
@@ -59,13 +73,25 @@ def multiplicate(algorithm):
 
     print("\nВведите матрицу A!")
     A = input_matrix()
+
+    if not len(A):
+        return
+    
     print("\nВведенная матрица A:")
     print_matrix(A)
 
     print("\nВведите матрицу B!")
     B = input_matrix()
+
+    if not len(B):
+        return
+
     print("\nВведенная матрица B:")
     print_matrix(B)
+
+    if len(A[0]) != len(B):
+        print("\nОшибка! Число столбцов матрицы A должно быть равно числу строк матрицы B!\n")
+        return
 
     result = algorithm(A, B)
 
