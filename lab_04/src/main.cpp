@@ -34,7 +34,11 @@ void multi_threaded()
     cout << endl << "Матрица смежности графа:" << endl;
     print_graph(&graph);
 
-    floyd(&graph);
+    cout << endl << "Введите число потоков:" << endl;
+    int count_threads;
+    cin >> count_threads;
+
+    multithreading(count_threads, &graph);
     cout << endl << "Матрица кратчайших путей графа:" << endl;;
     print_graph(&graph);
 
@@ -49,7 +53,7 @@ int main(void)
 
     while (process)
     {
-        cout << MSG;
+        cout << endl << MSG;
         cin >> command;
 
         if (command == SINGLE)

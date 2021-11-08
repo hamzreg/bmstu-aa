@@ -4,6 +4,11 @@
 #include <iostream>
 using namespace std;
 
+#include <mutex>
+#include <thread>
+#include <chrono>
+#include <vector>
+
 typedef struct
 {
     int order;
@@ -23,5 +28,7 @@ int print_graph(graph_t* graph);
 int free_graph(graph_t* graph);
 
 void floyd(graph_t* graph);
+void parallel_floyd(graph_t* graph, int count_threads, int thread_index);
+void multithreading(int count_threads, graph_t* graph);
 
 #endif

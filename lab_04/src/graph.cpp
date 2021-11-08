@@ -2,6 +2,10 @@
 
 void init_graph(graph_t* graph)
 {
+    /*
+    * Инициализация графа.
+    */
+
     graph->order = 0;
     graph->matrix = nullptr;
 }
@@ -9,6 +13,10 @@ void init_graph(graph_t* graph)
 
 int input_graph(graph_t* graph)
 {
+    /*
+    * Ввод матрицы смежности графа.
+    */
+
     cout << endl << "Введите порядок графа: ";
     cin >> graph->order;
 
@@ -41,6 +49,10 @@ int input_graph(graph_t* graph)
 
 int print_graph(graph_t* graph)
 {
+    /*
+    * Вывод матрицы смежности графа.
+    */
+
     if (graph->order == 0)
     {
         cout << endl << "Граф не задан." << endl;
@@ -64,6 +76,12 @@ int print_graph(graph_t* graph)
 
 int free_graph(graph_t* graph)
 {
+    /*
+    * Освобождение памяти
+    * матрицы смежности
+    * графа.
+    */
+
     if (graph->order == 0)
     {
         cout << endl << "Граф не задан." << endl;
@@ -86,6 +104,11 @@ int free_graph(graph_t* graph)
 
 void find_min_way(int **matrix, int i, int j, int k)
 {
+    /*
+    * Нахождение кратчайшего пути\
+    * между вершинами i и j.
+    */
+
     if (i != j && matrix[i][k] != NO_WAY && matrix[k][j] != NO_WAY)
     {
         if (matrix[i][j] == NO_WAY)
@@ -97,6 +120,11 @@ void find_min_way(int **matrix, int i, int j, int k)
 
 void floyd(graph_t* graph)
 {
+    /*
+    * Алгоритм Флойда нахождения
+    * кратчайших путей графа.
+    */
+
     for (int k = 0; k < graph->order; k++)
     {
         for (int i = 0; i < graph->order; i++)
@@ -109,9 +137,24 @@ void floyd(graph_t* graph)
     }
 }
 
-void floyd_multi_threaded(graph_t* graph)
+void parallel_floyd(graph_t* graph, int count_threads, int thread_index)
 {
-    for (int k = 0; k < graph->order; k++)
+    /*
+    * Параллельный алгоритм Флойда 
+    * нахождения кратчайших путей графа.
+    */
+
+    cout << endl << "======== THREAD " << thread_index + 1 << " START" << endl;
+
+    int step = graph->order / count_threads;
+    int start = thread_index * step;
+
+    if (thread_index + 1 == count_threads)
+    {
+        step = step + (graph->order - step * count_threads);
+    }
+
+    for (int k = start; k < start + step; k++)
     {
         for (int i = 0; i < graph->order; i++)
         {
@@ -120,5 +163,26 @@ void floyd_multi_threaded(graph_t* graph)
                 find_min_way(graph->matrix, i, j, k);
             }
         }
+    }
+
+    cout << endl << "======== THREAD " << thread_index + 1 << " END" << endl;
+}
+
+void multithreading(int count_threads, graph_t* graph)
+{
+    /*
+    * Распараллеливание.
+    */
+
+    std::vector<std::thread> threads(count_threads);
+
+    for (int i = 0; i < count_threads; i++)
+    {
+        threads[i] = std::thread(parallel_floyd, std::ref(graph), count_threads, i);
+    }
+
+    for (int i = 0; i < count_threads; i++)
+    {
+        threads[i].join();
     }
 }
