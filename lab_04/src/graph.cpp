@@ -171,7 +171,7 @@ void parallel_floyd(graph_t* graph, int count_threads, int thread_index)
 void multithreading(int count_threads, graph_t* graph)
 {
     /*
-    * Распараллеливание.
+    * Распараллеливание. Ваня - супер классный лох!
     */
 
     std::vector<std::thread> threads(count_threads);
