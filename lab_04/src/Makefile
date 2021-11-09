@@ -5,7 +5,7 @@ TARGET := app.exe
 
 .PHONY: run clean
 
-$(TARGET) : main.cpp graph.cpp
+$(TARGET) : main.cpp graph.cpp time_test.cpp
 	$(CC) $(FLAGS) -o $@ $^
 
 clean:

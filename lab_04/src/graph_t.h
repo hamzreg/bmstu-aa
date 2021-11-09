@@ -4,10 +4,10 @@
 #include <iostream>
 using namespace std;
 
-#include <mutex>
 #include <thread>
 #include <chrono>
 #include <vector>
+#include <ctime>
 
 typedef struct
 {
@@ -21,11 +21,13 @@ typedef struct
 
 #define MIN_ORDER   3
 #define NO_WAY      -1
+#define MAX_NUM     20
 
 void init_graph(graph_t* graph);
 int input_graph(graph_t* graph);
 int print_graph(graph_t* graph);
 int free_graph(graph_t* graph);
+void create_random_graph(graph_t* graph);
 
 void floyd(graph_t* graph);
 void parallel_floyd(graph_t* graph, int count_threads, int thread_index);

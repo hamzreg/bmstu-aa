@@ -102,6 +102,34 @@ int free_graph(graph_t* graph)
     return OK;
 }
 
+
+void create_random_graph(graph_t* graph)
+{
+    /*
+    * Создание графа,
+    * веса ребер которого - 
+    * случайные целые числа.
+    */
+
+    srand(time(NULL));
+
+    graph->matrix = new int* [graph->order];
+
+    for (int i = 0; i < graph->order; i++)
+    {
+       (graph->matrix)[i] = new int[graph->order];
+    }
+
+    for (int i = 0; i < graph->order; i++)
+    {
+        for (int j = 0; j < graph->order; j++)
+        {
+            graph->matrix[i][j] = rand() % MAX_NUM;
+        }
+    }
+}
+
+
 void find_min_way(int **matrix, int i, int j, int k)
 {
     /*
@@ -151,7 +179,7 @@ void parallel_floyd(graph_t* graph, int count_threads, int thread_index)
 
     if (thread_index + 1 == count_threads)
     {
-        step = step + (graph->order - step * count_threads);
+        step += + (graph->order - step * count_threads);
     }
 
     for (int k = start; k < start + step; k++)
@@ -171,7 +199,7 @@ void parallel_floyd(graph_t* graph, int count_threads, int thread_index)
 void multithreading(int count_threads, graph_t* graph)
 {
     /*
-    * Распараллеливание. Ваня - супер классный лох!
+    * Распараллеливание.
     */
 
     std::vector<std::thread> threads(count_threads);

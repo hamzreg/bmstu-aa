@@ -1,0 +1,101 @@
+\chapter{Технологическая часть}
+
+В данном разделе будут указаны средства реализации, будут представлены листинги кода, а также функциональные тесты.
+
+\section{Средства реализации}
+
+Реализация данной лабораторной работы выполнялась при помощи языка программирования Python \cite{python}. Выбор ЯП обусловлен простотой синтаксиса, большим числом библиотек и эффективностью визуализации данных.
+
+Замеры времени проводились при помощи функции process\_time из библиотеки time \cite{python-time}.
+
+\section{Сведения о модулях программы}
+
+Программа состоит из следующих модулей:
+
+\begin{itemize}
+	\item main.py - главный файл программы, предоставляющий пользователю меню для выполнения основных функций;
+	\item matrix.py - файл, содержащий функции работы с матрицами;
+	\item time\_test.py - файл, содержащий функции замеров времени работы указанных алгоритмов;
+	\item graph\_result.py - файл, содержащий функции визуализации временных характеристик описанных алгоритмов.
+\end{itemize}
+
+\section{Листинги кода}
+
+
+
+\section{Функциональные тесты}
+
+В таблице \ref{tbl:func_test} приведены функциональные тесты для функций, реализующих алгоритмы умножения матриц. Все тесты пройдены успешно.
+
+\begin{table}[h]
+	\begin{center}
+		\begin{threeparttable}
+		\captionsetup{justification=raggedright,singlelinecheck=off}
+		\caption{\label{tbl:func_test} Функциональные тесты}
+		\begin{tabular}{|c@{\hspace{7mm}}|c@{\hspace{7mm}}|c@{\hspace{7mm}}|c@{\hspace{7mm}}|c@{\hspace{7mm}}|c@{\hspace{7mm}}|}
+			\hline
+			Матрица A & Матрица B & Ожидаемый результат \\ 
+			\hline
+			$\begin{pmatrix}
+				&
+			\end{pmatrix}$ &
+			$\begin{pmatrix}
+				&
+			\end{pmatrix}$ &
+			Сообщение об ошибке \\ \hline
+
+			$\begin{pmatrix}
+				&
+			\end{pmatrix}$ &
+			$\begin{pmatrix}
+				1 & 2\\
+				3 & 4\\
+				5 & 6
+			\end{pmatrix}$ &
+			Сообщение об ошибке \\ \hline
+
+			$\begin{pmatrix}
+				1 & 0 & 1
+			\end{pmatrix}$ &
+			$\begin{pmatrix}
+				-1 & 0 & -1
+			\end{pmatrix}$ &
+			Сообщение об ошибке \\ \hline
+
+			$\begin{pmatrix}
+				1 & 2 & 3 \\
+				4 & 5 & 6 \\
+				7 & 8 & 9
+			\end{pmatrix}$ &
+			$\begin{pmatrix}
+				-1 & -2 & -3 \\
+				-4 & -5 & -6 \\
+				-7 & -8 & -9
+			\end{pmatrix}$ &
+			$\begin{pmatrix}
+				-30 & -36 & -42 \\
+				-66 & -81 & -96 \\
+				-102 & -126 & -150
+			\end{pmatrix}$ \\ \hline
+
+			$\begin{pmatrix}
+				1 & 2 & 3
+			\end{pmatrix}$ &
+			$\begin{pmatrix}
+				1 \\
+				2 \\
+				3
+			\end{pmatrix}$ &
+			$\begin{pmatrix}
+				14 \\
+			\end{pmatrix}$ \\ \hline
+
+		\end{tabular}
+		\end{threeparttable}
+	\end{center}
+	
+\end{table}
+
+\section{Вывод}
+
+Были реализованы функции алгоритмов умножения матриц. Было проведено функциональное тестирование указанных функций.

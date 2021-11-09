@@ -3,11 +3,16 @@
 using namespace std;
 
 #include "graph_t.h"
+#include "time_test.h"
 #include "constants.h"
 
 
 void single_threaded()
 {
+    /*
+    * Однопоточный вариант.
+    */
+
     graph_t graph;
 
     init_graph(&graph);
@@ -26,6 +31,10 @@ void single_threaded()
 
 void multi_threaded()
 {
+    /*
+    * Многопоточный вариант.
+    */
+
     graph_t graph;
 
     init_graph(&graph);
@@ -48,8 +57,15 @@ void multi_threaded()
 
 int main(void)
 {
+    /*
+    * Инициализация графа.
+    */
+
     bool process = true;
     int command;
+    int measure_type;
+    int order;
+    int count_threads = 1;
 
     while (process)
     {
@@ -63,6 +79,34 @@ int main(void)
         else if (command == MULTI)
         {
             multi_threaded();
+        }
+        else if (command == TIME_TEST)
+        {
+            cout << endl << TIME_MSG;
+            cin >> measure_type;
+
+            cout << endl << "Введите порядок графа: ";
+            cin >> order;
+
+            if (measure_type == MULTI)
+            {
+                cout << endl << "Введите число потоков:" << endl;
+                cin >> count_threads;
+            }
+            else
+                count_threads = 1;
+
+            double result = measure_time(order, measure_type, count_threads);
+            cout << endl << "Полученное время = " << result << endl;
+            write_in_file(measure_type, order, count_threads, result);
+        }
+        else if (command == TEST1)
+        {
+            test_count_threads();
+        }
+        else if (command == TEST2)
+        {
+            test_order();
         }
         else
         {
