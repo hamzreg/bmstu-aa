@@ -1,94 +1,160 @@
 \chapter{Технологическая часть}
 
-В данном разделе будут указаны средства реализации, будут представлены листинги кода, а также функциональные тесты.
+В данном разделе будут указаны средства реализации, сведения о модулях программы, будут представлены листинги кода, а также функциональные тесты.
 
 \section{Средства реализации}
 
-Реализация данной лабораторной работы выполнялась при помощи языка программирования Python \cite{python}. Выбор ЯП обусловлен простотой синтаксиса, большим числом библиотек и эффективностью визуализации данных.
+Реализация данной лабораторной работы выполнялась при помощи языка программирования $C++$ \cite{c++}. Выбор ЯП обусловлен наличием инструментов для реализации принципов многопоточного программирования.
 
-Замеры времени проводились при помощи функции process\_time из библиотеки time \cite{python-time}.
+Замеры времени проводились при помощи функции $std::chrono::system\_clock::now(...)$ из библиотеки $chrono$ \cite{time}.
+
+Реализация графического представления замеров времени производилась при помощи языка программирования $Python$ \cite{python}, так как данный ЯП представляет простую в использовании графическую библиотеку.
 
 \section{Сведения о модулях программы}
 
 Программа состоит из следующих модулей:
 
 \begin{itemize}
-	\item main.py - главный файл программы, предоставляющий пользователю меню для выполнения основных функций;
-	\item matrix.py - файл, содержащий функции работы с матрицами;
-	\item time\_test.py - файл, содержащий функции замеров времени работы указанных алгоритмов;
+	\item main.cpp - главный файл программы, предоставляющий пользователю меню для выполнения основных функций;
+	\item graph.cpp и graph\_t.h - файлы, содержащие функции работы с графом;
+	\item time\_test.cpp и time\_test.h - файлы, содержащие функции замеров времени работы указанных алгоритмов;
+	\item constants.h - файл, содержащий все необходимые константы;
 	\item graph\_result.py - файл, содержащий функции визуализации временных характеристик описанных алгоритмов.
 \end{itemize}
 
 \section{Листинги кода}
 
+В листинге \ref{lst:min} представлен алгоритм нахождения кратчайшего пути между двумя вершинами. В листингах \ref{lst:floyd}-\ref{lst:parallel} представлены последовательный и параллельный алгоритмы Флойда.
 
+\begin{center}
+    \captionsetup{justification=raggedright,singlelinecheck=off}
+    \begin{lstlisting}[label=lst:min,caption=Алгоритм нахождения кратчайшего пути между двумя вершинами]
+void find_min_way(int **matrix, int i, int j, int k)
+{
+    if (i != j && matrix[i][k] != NO_WAY && matrix[k][j] != NO_WAY)
+    {
+        if (matrix[i][j] == NO_WAY)
+            matrix[i][j] = matrix[i][k] + matrix[k][j];
+        else
+            matrix[i][j] = min(matrix[i][j], matrix[i][k] + matrix[k][j]);
+    }
+}
+\end{lstlisting}
+\end{center}
+
+\begin{center}
+    \captionsetup{justification=raggedright,singlelinecheck=off}
+    \begin{lstlisting}[label=lst:floyd,caption=Последовательный алгоритм Флойда]
+void floyd(graph_t* graph)
+{
+    for (int k = 0; k < graph->order; k++)
+    {
+        for (int i = 0; i < graph->order; i++)
+        {
+            for (int j = 0; j < graph->order; j++)
+            {
+                find_min_way(graph->matrix, i, j, k);
+            }
+        }
+    }
+}
+\end{lstlisting}
+\end{center}
+
+\begin{center}
+    \captionsetup{justification=raggedright,singlelinecheck=off}
+    \begin{lstlisting}[label=lst:parallel,caption=Параллельный алгоритм Флойда]
+void parallel_floyd(graph_t* graph, int count_threads, int thread_index)
+{
+    int step = graph->order / count_threads;
+    int start = thread_index * step;
+
+    if (thread_index + 1 == count_threads)
+    {
+        step += (graph->order - step * count_threads);
+    }
+
+    for (int k = start; k < start + step; k++)
+    {
+        for (int i = 0; i < graph->order; i++)
+        {
+            for (int j = 0; j < graph->order; j++)
+            {
+                find_min_way(graph->matrix, i, j, k);
+            }
+        }
+    }
+}
+
+void multithreading(int count_threads, graph_t* graph)
+{
+    std::vector<std::thread> threads(count_threads);
+
+    for (int i = 0; i < count_threads; i++)
+    {
+        threads[i] = std::thread(parallel_floyd, std::ref(graph), count_threads, i);
+    }
+
+    for (int i = 0; i < count_threads; i++)
+    {
+        threads[i].join();
+    }
+}
+\end{lstlisting}
+\end{center}
 
 \section{Функциональные тесты}
 
-В таблице \ref{tbl:func_test} приведены функциональные тесты для функций, реализующих алгоритмы умножения матриц. Все тесты пройдены успешно.
+В таблице \ref{tbl:func_test} приведены функциональные тесты для функций, реализующих алгоритм Флойда. Все тесты пройдены успешно.
 
 \begin{table}[h]
 	\begin{center}
 		\begin{threeparttable}
 		\captionsetup{justification=raggedright,singlelinecheck=off}
 		\caption{\label{tbl:func_test} Функциональные тесты}
-		\begin{tabular}{|c@{\hspace{7mm}}|c@{\hspace{7mm}}|c@{\hspace{7mm}}|c@{\hspace{7mm}}|c@{\hspace{7mm}}|c@{\hspace{7mm}}|}
+		\begin{tabular}{|c|c|c|}
 			\hline
-			Матрица A & Матрица B & Ожидаемый результат \\ 
+			Матрица A & Кол-во потоков & Ожидаемый результат \\ 
 			\hline
 			$\begin{pmatrix}
 				&
 			\end{pmatrix}$ &
-			$\begin{pmatrix}
-				&
-			\end{pmatrix}$ &
-			Сообщение об ошибке \\ \hline
+			4 &
+			Сообщение об ошибке \\
+			\hline
 
 			$\begin{pmatrix}
-				&
+				0 & 1 & -1 \\
+				-2 & 0 & 3 \\
+				4 & 5 & 0
 			\end{pmatrix}$ &
+			4 &
+			Сообщение об ошибке \\
+			\hline
+ 
 			$\begin{pmatrix}
-				1 & 2\\
-				3 & 4\\
-				5 & 6
+				0 & 1 & -1 \\
+				-2 & 0 & 3 \\
+				4 & 5 & 0
 			\end{pmatrix}$ &
-			Сообщение об ошибке \\ \hline
+			0 &
+			Сообщение об ошибке \\
+			\hline
 
 			$\begin{pmatrix}
-				1 & 0 & 1
+				0 & 5 & 9 & -1 \\
+				-1 & 0 & 2 & 8 \\
+				-1 & -1 & 0 & 7 \\
+				4 & -1 & -1 & 0 \\
 			\end{pmatrix}$ &
+			4 &
 			$\begin{pmatrix}
-				-1 & 0 & -1
-			\end{pmatrix}$ &
-			Сообщение об ошибке \\ \hline
-
-			$\begin{pmatrix}
-				1 & 2 & 3 \\
-				4 & 5 & 6 \\
-				7 & 8 & 9
-			\end{pmatrix}$ &
-			$\begin{pmatrix}
-				-1 & -2 & -3 \\
-				-4 & -5 & -6 \\
-				-7 & -8 & -9
-			\end{pmatrix}$ &
-			$\begin{pmatrix}
-				-30 & -36 & -42 \\
-				-66 & -81 & -96 \\
-				-102 & -126 & -150
-			\end{pmatrix}$ \\ \hline
-
-			$\begin{pmatrix}
-				1 & 2 & 3
-			\end{pmatrix}$ &
-			$\begin{pmatrix}
-				1 \\
-				2 \\
-				3
-			\end{pmatrix}$ &
-			$\begin{pmatrix}
-				14 \\
-			\end{pmatrix}$ \\ \hline
+				0 & 5 & 7 & 13 \\
+				12 & 0 & 2 & 8 \\
+				11 & 16 & 0 & 7 \\
+				4 & 9 & 11 & 0 \\
+			\end{pmatrix}$ \\
+			\hline
 
 		\end{tabular}
 		\end{threeparttable}
@@ -98,4 +164,4 @@
 
 \section{Вывод}
 
-Были реализованы функции алгоритмов умножения матриц. Было проведено функциональное тестирование указанных функций.
+Были реализованы функции последовательного и параллельного алгоритма Флойда. Было проведено функциональное тестирование указанных функций.

@@ -69,7 +69,7 @@ def get_graph_result(type_graph):
         title = "Зависимость времени от кол-ва потоков"
         xlabel = "Кол-во потоков"
         
-        label1 = "Однопоточный вариант"
+        label1 = "Без распараллеливания"
         label2 = "Многопоточный вариант"
 
         
@@ -81,7 +81,7 @@ def get_graph_result(type_graph):
         title = "Зависимость времени от порядка графа"
         xlabel = "Порядок графа"
 
-        label1 = "Однопоточный вариант"
+        label1 = "Без распараллеливания"
         label2 = "4 потока"
 
         results.append(get_file_data(NAME_ORDER_SINGLE, Menu.order))

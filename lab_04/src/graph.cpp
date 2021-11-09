@@ -172,7 +172,7 @@ void parallel_floyd(graph_t* graph, int count_threads, int thread_index)
     * нахождения кратчайших путей графа.
     */
 
-    cout << endl << "======== THREAD " << thread_index + 1 << " START" << endl;
+    //cout << endl << "======== THREAD " << thread_index + 1 << " START" << endl;
 
     int step = graph->order / count_threads;
     int start = thread_index * step;
@@ -193,7 +193,7 @@ void parallel_floyd(graph_t* graph, int count_threads, int thread_index)
         }
     }
 
-    cout << endl << "======== THREAD " << thread_index + 1 << " END" << endl;
+    //cout << endl << "======== THREAD " << thread_index + 1 << " END" << endl;
 }
 
 void multithreading(int count_threads, graph_t* graph)
