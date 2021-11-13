@@ -15,11 +15,12 @@ typedef struct
     int **matrix;
 } graph_t;
 
-#define NOT_EXISTS  1
-#define ORDER_ERROR 2
-#define OK          0
+#define NOT_EXISTS   1
+#define ORDER_ERROR  2
+#define WEIGHT_ERROR 3
+#define OK           0
 
-#define MIN_ORDER   3
+#define MIN_ORDER    3
 #define NO_WAY      -1
 #define MAX_NUM     20
 

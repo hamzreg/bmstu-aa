@@ -23,6 +23,7 @@ int input_graph(graph_t* graph)
     if (graph->order < MIN_ORDER)
     {
         cout << endl << "Порядок графа должен быть больше 3." << endl;
+        graph->order = 0;
         return ORDER_ERROR;
     }
 
@@ -40,6 +41,13 @@ int input_graph(graph_t* graph)
        for (int j = 0; j < graph->order; j++)
        {
            cin >> graph->matrix[i][j];
+
+           if (graph->matrix[i][j] < NO_WAY)
+           {
+               cout << endl << "Неверный вес ребра." << endl;
+               free_graph(graph);
+               return WEIGHT_ERROR;
+           }
        }
     }
 
@@ -172,7 +180,7 @@ void parallel_floyd(graph_t* graph, int count_threads, int thread_index)
     * нахождения кратчайших путей графа.
     */
 
-    //cout << endl << "======== THREAD " << thread_index + 1 << " START" << endl;
+    cout << endl << "======== THREAD " << thread_index + 1 << " START" << endl;
 
     int step = graph->order / count_threads;
     int start = thread_index * step;
@@ -193,7 +201,7 @@ void parallel_floyd(graph_t* graph, int count_threads, int thread_index)
         }
     }
 
-    //cout << endl << "======== THREAD " << thread_index + 1 << " END" << endl;
+    cout << endl << "======== THREAD " << thread_index + 1 << " END" << endl;
 }
 
 void multithreading(int count_threads, graph_t* graph)

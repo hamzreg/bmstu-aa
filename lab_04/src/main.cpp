@@ -16,7 +16,9 @@ void single_threaded()
     graph_t graph;
 
     init_graph(&graph);
-    input_graph(&graph);
+    
+    if (input_graph(&graph))
+        return;
 
     cout << endl << "Матрица смежности графа:" << endl;
     print_graph(&graph);
@@ -38,7 +40,9 @@ void multi_threaded()
     graph_t graph;
 
     init_graph(&graph);
-    input_graph(&graph);
+
+    if (input_graph(&graph))
+        return;
 
     cout << endl << "Матрица смежности графа:" << endl;
     print_graph(&graph);
@@ -46,6 +50,13 @@ void multi_threaded()
     cout << endl << "Введите число потоков:" << endl;
     int count_threads;
     cin >> count_threads;
+
+    if (count_threads < 1)
+    {
+        cout << endl << "Неверное число потоков." << endl;
+        free_graph(&graph);
+        return;
+    }
 
     multithreading(count_threads, &graph);
     cout << endl << "Матрица кратчайших путей графа:" << endl;;
