@@ -1,0 +1,105 @@
+<mxfile host="65bd71144e">
+    <diagram id="HNHIgXDb44cZXbLYwc57" name="Page-1">
+        <mxGraphModel dx="3466" dy="555" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="1654" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="7" value="&lt;font style=&quot;font-size: 12px&quot;&gt;Конец&lt;/font&gt;" style="html=1;dashed=0;whitespace=wrap;shape=mxgraph.dfd.start;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="-1928" y="1300" width="200" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=none;endFill=0;strokeWidth=2;" parent="1" source="11" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="-1828" y="1080" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="11" value="Цикл i от 0 до 3" style="shape=loopLimit;whiteSpace=wrap;html=1;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="-1928" y="970" width="200" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="35" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0.5;entryDx=0;entryDy=-30;entryPerimeter=0;endArrow=none;endFill=0;strokeWidth=2;" parent="1" source="13" target="7" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="13" value="i += 1" style="shape=loopLimit;whiteSpace=wrap;html=1;strokeWidth=2;direction=west;" parent="1" vertex="1">
+                    <mxGeometry x="-1928" y="1190" width="200" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="18" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;strokeWidth=2;" parent="1" target="13" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="-1828" y="1150" as="sourcePoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="33" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=none;endFill=0;strokeWidth=2;" parent="1" source="24" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="-1828" y="860" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="24" value="&lt;font&gt;Создать массив&amp;nbsp;&lt;br&gt;потоков threads длиной 3&lt;br&gt;&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="-1928" y="750" width="200" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="34" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=none;endFill=0;strokeWidth=2;" parent="1" target="11" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="-1828" y="930" as="sourcePoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="31" value="&lt;font&gt;Указать, что основной поток должен завершиться после завершения потока i&amp;nbsp;&lt;br&gt;&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="-1928" y="1080" width="200" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="36" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;endArrow=none;endFill=0;strokeWidth=2;dashed=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="38" target="40">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="-1678" y="290" as="sourcePoint"/>
+                        <Array as="points">
+                            <mxPoint x="-1708" y="220"/>
+                            <mxPoint x="-1708" y="220"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="37" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0.5;exitDx=0;exitDy=30;exitPerimeter=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeWidth=2;endArrow=none;endFill=0;" edge="1" parent="1" source="38">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="-1828" y="305" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="38" value="&lt;font style=&quot;font-size: 12px&quot;&gt;Начало&lt;/font&gt;" style="html=1;dashed=0;whitespace=wrap;shape=mxgraph.dfd.start;strokeWidth=2;" vertex="1" parent="1">
+                    <mxGeometry x="-1928" y="190" width="200" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="39" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="-1878" y="340" as="sourcePoint"/>
+                        <mxPoint x="-1878" y="340" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="40" value="&lt;div&gt;&lt;span style=&quot;white-space: pre&quot;&gt;&#9;&lt;/span&gt;Конвейерная&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;white-space: pre&quot;&gt;&#9;&lt;/span&gt;обработка набора&amp;nbsp;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;white-space: pre&quot;&gt;&#9;&lt;/span&gt;строк&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;&lt;span style=&quot;white-space: pre&quot;&gt;&#9;&lt;/span&gt;Вход: число строк count,&lt;br&gt;&lt;span style=&quot;white-space: pre&quot;&gt;&#9;&lt;/span&gt;длина строк len,&lt;br&gt;&lt;span style=&quot;white-space: pre&quot;&gt;&#9;&lt;/span&gt;флаг палиндрома is_palindrome&amp;nbsp;&lt;br&gt;&lt;span style=&quot;white-space: pre&quot;&gt;&#9;&lt;/span&gt;Выход: лог обработки" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.annotation_1;align=left;pointerEvents=1;" vertex="1" parent="1">
+                    <mxGeometry x="-1628" y="150" width="50" height="140" as="geometry"/>
+                </mxCell>
+                <mxCell id="41" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=none;endFill=0;strokeWidth=2;" edge="1" parent="1" source="42">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="-1828" y="525" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="42" value="Цикл i от 0 до count" style="shape=loopLimit;whiteSpace=wrap;html=1;strokeWidth=2;" vertex="1" parent="1">
+                    <mxGeometry x="-1928" y="415" width="200" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="48" style="edgeStyle=none;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeWidth=2;endArrow=none;endFill=0;" edge="1" parent="1" source="43" target="24">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="43" value="i += 1" style="shape=loopLimit;whiteSpace=wrap;html=1;strokeWidth=2;direction=west;" vertex="1" parent="1">
+                    <mxGeometry x="-1928" y="635" width="200" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="44" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;strokeWidth=2;" edge="1" parent="1" target="43">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="-1828" y="595" as="sourcePoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="45" value="&lt;font&gt;&lt;div&gt;Создать строку&amp;nbsp;&lt;/div&gt;&lt;div&gt;по флагу is_palindrome&lt;/div&gt;&lt;div&gt;длиной&amp;nbsp; len и&lt;/div&gt;&lt;div&gt;добавить её в очередь q1&lt;/div&gt;&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;align=center;" vertex="1" parent="1">
+                    <mxGeometry x="-1928" y="525" width="200" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="46" style="edgeStyle=none;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;rounded=0;strokeWidth=2;endArrow=none;endFill=0;" edge="1" parent="1" source="47" target="42">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="47" value="&lt;font&gt;&lt;div style=&quot;text-align: left&quot;&gt;Создать очереди&lt;/div&gt;&lt;div&gt;q1, q2, q3&lt;/div&gt;&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;" vertex="1" parent="1">
+                    <mxGeometry x="-1928" y="305" width="200" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="49" value="&lt;font&gt;Связать каждый поток&lt;br&gt;со своей лентой&lt;br&gt;&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;" vertex="1" parent="1">
+                    <mxGeometry x="-1928" y="860" width="200" height="70" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

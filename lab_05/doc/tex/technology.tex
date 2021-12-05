@@ -1,0 +1,282 @@
+\chapter{Технологическая часть}
+
+В данном разделе будут указаны средства реализации, сведения о модулях программы, будут представлены листинги кода, а также функциональные тесты.
+
+\section{Средства реализации}
+
+Реализация данной лабораторной работы выполнялась при помощи языка программирования $C++$ \cite{c++}. Выбор ЯП обусловлен наличием инструментов для реализации принципов многопоточного программирования.
+
+Замеры времени проводились при помощи функции $std::chrono::system\_clock::now(...)$ из библиотеки $chrono$ \cite{time}.
+
+Реализация графического представления замеров времени производилась при помощи языка программирования $Python$ \cite{python}, так как данный ЯП представляет простую в использовании графическую библиотеку.
+
+\section{Сведения о модулях программы}
+
+Программа состоит из следующих модулей:
+
+\begin{itemize}
+	\item main.cpp - главный файл программы, предоставляющий пользователю меню для выполнения основных функций;
+	\item str.cpp и str.h - файлы, содержащие функции работы со строкой;
+	\item conveyor.cpp и conveyor.h - файлы, содержащие функции обработки данных;
+	\item time\_test.cpp и time\_test.h - файлы, содержащие функции замеров времени работы указанных алгоритмов;
+	\item constants.h - файл, содержащий все необходимые константы;
+	\item graph\_result.py - файл, содержащий функции визуализации временных характеристик описанных алгоритмов.
+\end{itemize}
+
+\section{Листинги кода}
+
+В листингах \ref{lst:linear}-\ref{lst:parallel} представлены алгоритмы последовательной и конвейерной обработки строк. В листингах \ref{lst:first}-\ref{lst:third} представлены алгоритмы работы трех лент. В листингах \ref{lst:spaces}-\ref{lst:palindrome} представлены алгоритмы работы со строками.
+\clearpage
+\begin{center}
+    \captionsetup{justification=raggedright,singlelinecheck=off}
+    \begin{lstlisting}[label=lst:linear,caption=Последовательная обработка]
+void linear_mode(const int count, const int len,
+                 const int is_palindrome)
+{
+    std::queue<std::string> q1;
+    std::queue<std::string> q2;
+    std::queue<std::string> q3;
+
+    for ( int i =0; i < count; ++i )
+    {
+        std::string new_str;
+        create_str(new_str, len, is_palindrome);
+
+        q1.push(new_str);
+    }
+
+    cur_time = 0;
+
+    for ( int i = 0; i < count; ++i )
+    {
+        std::string str = q1.front();
+        linear_log(str, 1, i + 1);
+        q2.push(str);
+        q1.pop();
+
+        str = q2.front();
+        linear_log(str, 2, i + 1);
+        q3.push(str);
+        q2.pop();
+
+        str = q3.front();
+        linear_log(str, 3, i + 1);
+        q3.pop();
+    }
+}
+\end{lstlisting}
+\end{center}
+\clearpage
+\begin{center}
+    \captionsetup{justification=raggedright,singlelinecheck=off}
+    \begin{lstlisting}[label=lst:parallel,caption=Конвейерная обработка]
+void parallel_mode(const int count, const int len,
+                 const int is_palindrome)
+{
+    std::queue<std::string> q1;
+    std::queue<std::string> q2;
+    std::queue<std::string> q3;
+
+    for ( int i = 0; i < count; ++i )
+    {
+        std::string str;
+        create_str(str, len, is_palindrome);
+
+        q1.push(str);
+    }
+    
+    for ( int i = 0; i < count + 1; ++i )
+    {
+        cur_time1.push_back(0);
+        cur_time2.push_back(0);
+        cur_time3.push_back(0);
+    }
+
+    std::vector<std::thread> threads(COUNT_THREADS);
+
+    threads[0] = std::thread(first_belt, std::ref(q1), std::ref(q2));
+    threads[1] = std::thread(second_belt, std::ref(q1), std::ref(q2), std::ref(q3));
+    threads[2] = std::thread(third_belt, std::ref(q1), std::ref(q2), std::ref(q3));
+
+    for ( int i = 0; i < COUNT_THREADS; ++i )
+    {
+        threads[i].join();
+    }
+}
+\end{lstlisting}
+\end{center}
+\clearpage
+\begin{center}
+    \captionsetup{justification=raggedright,singlelinecheck=off}
+    \begin{lstlisting}[label=lst:first,caption=Алгоритм работы первой ленты]
+void first_belt(std::queue<std::string>& q1, std::queue<std::string>& q2)
+{
+    int task = 0;
+    std::mutex m;
+
+    while ( !q1.empty())
+    {
+        m.lock();
+        std::string str = q1.front();
+        m.unlock();
+
+        parallel_log(str, 1, ++task);
+
+        m.lock();
+        q2.push(str);
+        q1.pop();
+        m.unlock();
+    }
+}
+\end{lstlisting}
+\end{center}
+\clearpage
+\begin{center}
+    \captionsetup{justification=raggedright,singlelinecheck=off}
+    \begin{lstlisting}[label=lst:second,caption=Алгоритм работы второй ленты]
+void second_belt(std::queue<std::string>& q1, std::queue<std::string>& q2, std::queue<std::string>& q3)
+{
+    int task = 0;
+    std::mutex m;
+
+    do
+    {
+        if ( !q2.empty() )
+        {
+            m.lock();
+            std::string str = q2.front();
+            m.unlock();
+
+            parallel_log(str, 2, ++task);
+
+            m.lock();
+            q3.push(str);
+            q2.pop();
+            m.unlock();
+        }
+    } while ( !q1.empty() || !q2.empty() );
+}
+\end{lstlisting}
+\end{center}
+\clearpage
+\begin{center}
+    \captionsetup{justification=raggedright,singlelinecheck=off}
+    \begin{lstlisting}[label=lst:third,caption=Алгоритм работы третьей ленты]
+void third_belt(std::queue<std::string>& q1, std::queue<std::string>& q2, std::queue<std::string>& q3)
+{
+    int task = 0;
+    std::mutex m;
+
+    do
+    {
+        if ( !q3.empty() )
+        {
+            m.lock();
+            std::string str = q3.front();
+            m.unlock();
+
+            parallel_log(str, 3, ++task);
+
+            m.lock();
+            q3.pop();
+            m.unlock();
+        }
+    } while ( !q1.empty() || !q2.empty() || !q3.empty() );
+}
+\end{lstlisting}
+\end{center}
+
+\begin{center}
+    \captionsetup{justification=raggedright,singlelinecheck=off}
+    \begin{lstlisting}[label=lst:spaces,caption=Алгоритм удаления пробелов]
+void remove_spaces(std::string& str)
+{
+    const char space = ' ';
+    int len = str.length();
+
+    for ( int i = 0; i < len; ++i )
+    {
+        if ( str[i] == space )
+        {
+            str.erase(i, 1);
+            i--;
+        }
+    }
+}
+\end{lstlisting}
+\end{center}
+
+\begin{center}
+    \captionsetup{justification=raggedright,singlelinecheck=off}
+    \begin{lstlisting}[label=lst:register,caption=Алгоритм перевода в другой регистр]
+void change_register(std::string& str)
+{
+    int len = str.length();
+
+    for ( int i = 0; i < len; ++i )
+    {
+        if ( str[i] >= 'A' && str[i] <= 'Z' )
+        {
+            str[i] += DIFF;
+        }
+        else if ( str[i] >= 'a' && str[i] <= 'z' )
+        {
+            str[i] -= DIFF;
+        }
+    }
+}
+\end{lstlisting}
+\end{center}
+
+\begin{center}
+    \captionsetup{justification=raggedright,singlelinecheck=off}
+    \begin{lstlisting}[label=lst:palindrome,caption=Алгоритм определения палиндрома]
+int check_palindrome(std::string& str)
+{
+    int result = PALINDROME;
+    int len = str.length();
+
+    for ( int i = 0; i < len / 2; ++i )
+    {
+        if ( str[i] != str[len - i - 1] )
+        {
+            result = NOT_PALINDROME;
+            break;
+        }
+    }
+
+    return result;
+}
+\end{lstlisting}
+\end{center}
+
+\section{Функциональные тесты}
+
+В таблице \ref{tbl:func_test} приведены функциональные тесты для функций, реализующих строковые алгоритмы. Все тесты пройдены успешно.
+
+\begin{table}[h]
+	\begin{center}
+		\begin{threeparttable}
+		\captionsetup{justification=raggedright,singlelinecheck=off}
+		\caption{\label{tbl:func_test} Функциональные тесты}
+		\begin{tabular}{|c|c|c|c|}
+			\hline
+			Обработка & Число строк & Длина строк & Ожидаемый результат \\ 
+			\hline
+			Последовательная & 0 & 100 & Сообщение об ошибке \\
+			\hline
+			Конвейерная & 50 & -2 & Сообщение об ошибке \\
+			\hline
+			Последовательная & 50 & 1000 & Лог обработки \\
+			\hline
+			Конвейерная & 60 & 400 & Лог обработки \\
+			\hline
+		\end{tabular}
+		\end{threeparttable}
+	\end{center}
+	
+\end{table}
+
+\section{Вывод}
+
+Были реализованы функции последовательной и конвейерной обработки набора строк. Было проведено функциональное тестирование указанных функций.

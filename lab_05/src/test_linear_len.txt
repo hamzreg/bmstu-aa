@@ -1,0 +1,135 @@
+Последовательный
+Число строк : 50
+Time test:0.010505
+Time test:0.0227067
+Time test:0.0379961
+Time test:0.0549852
+Time test:0.0754371
+Time test:0.0963478
+Time test:0.124134
+Time test:0.153527
+Time test:0.183484
+Time test:0.216039
+
+Число строк : 60
+Time test:0.0122026
+Time test:0.0275675
+Time test:0.0444819
+Time test:0.0643186
+Time test:0.089428
+Time test:0.117103
+Time test:0.148143
+Time test:0.182475
+Time test:0.223946
+Time test:0.258772
+
+Число строк : 10
+Time test:0.00423032
+Time test:0.00492197
+Time test:0.00982671
+Time test:0.0148205
+Time test:0.0195122
+Time test:0.0263445
+Time test:0.0308759
+Time test:0.0368916
+Time test:0.0488796
+Time test:0.0527271
+
+Time test:0.00714566
+Time test:0.00578205
+Time test:0.00665335
+Time test:0.00622548
+Time test:0.00668922
+Time test:0.0063078
+Time test:0.00787207
+Time test:0.0075988
+Time test:0.00811354
+Time test:0.00941068
+Time test:0.010253
+
+Time test:0.00536668
+Time test:0.00372732
+Time test:0.00455066
+Time test:0.004173
+Time test:0.00610597
+Time test:0.00401028
+Time test:0.00742847
+Time test:0.006465
+Time test:0.00507465
+Time test:0.00536238
+Time test:0.00620687
+-----
+Длина строк : 100000
+Time test:0.0453733
+Time test:0.0883974
+Time test:0.128318
+Time test:0.171075
+Time test:0.213142
+
+Длина строк : 5000
+Time test:0.0025337
+Time test:0.00251652
+Time test:0.00280014
+Time test:0.00358235
+Time test:0.00614625
+
+Длина строк : 6000
+Time test:0.00150191
+Time test:0.00298096
+Time test:0.00376455
+Time test:0.0047981
+Time test:0.00612586
+
+Параллельный
+
+Число строк : 50
+Time test:0.0122178
+Time test:0.0190031
+Time test:0.0256252
+Time test:0.0445616
+Time test:0.0687721
+Time test:0.104264
+Time test:0.209275
+Time test:0.247226
+Time test:0.223091
+Time test:0.269538
+
+Число строк : 10
+Time test:0.00353928
+Time test:0.00321933
+Time test:0.00478432
+Time test:0.0114914
+Time test:0.0132036
+Time test:0.0230261
+Time test:0.0223084
+Time test:0.0344795
+Time test:0.0372315
+Time test:0.0499187
+
+Time test:0.00536668
+Time test:0.00372732
+Time test:0.00455066
+Time test:0.004173
+Time test:0.00610597
+Time test:0.00401028
+Time test:0.00742847
+Time test:0.006465
+Time test:0.00507465
+Time test:0.00536238
+Time test:0.00620687
+
+-----
+
+Длина строк : 5000
+Time test:0.00203991
+Time test:0.00301454
+Time test:0.00265869
+Time test:0.00284999
+Time test:0.00309837
+
+Длина строк : 6000
+Time test:0.00208726
+Time test:0.0026085
+Time test:0.00288755
+Time test:0.00439648
+Time test:0.00562291
