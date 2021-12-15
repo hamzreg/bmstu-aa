@@ -1,0 +1,301 @@
+\chapter{Технологическая часть}
+
+В данном разделе будут указаны средства реализации, будут представлены листинги кода, а также функциональные тесты.
+
+\section{Средства реализации}
+
+Реализация данной лабораторной работы выполнялась при помощи языка программирования Python \cite{python}. Выбор ЯП обусловлен простотой синтаксиса, большим числом библиотек и эффективностью визуализации данных.
+
+Замеры времени проводились при помощи функции process\_time из библиотеки time \cite{python-time}.
+
+\section{Сведения о модулях программы}
+
+Программа состоит из следующих модулей:
+
+\begin{itemize}
+	\item main.py - главный файл программы, предоставляющий пользователю меню для выполнения основных функций;
+	\item matrix.py - файл, содержащий функции работы с матрицами;
+	\item salesman.py - файл, содержащий метды решения задачи коммивояжера;
+	\item time\_test.py - файл, содержащий функции замеров времени работы указанных алгоритмов;
+	\item graph\_result.py - файл, содержащий функции визуализации временных характеристик описанных алгоритмов.
+\end{itemize}
+
+\section{Листинги кода}
+
+Полный перебор приведен в листинге \ref{lst:brute-force}, муравьиный алгоритм - в листнге \ref{lst:ant}. Алгоритмы, используемые в муравьином алгоритмы представлены в листингах \ref{lst:proximity}-\ref{lst:update}.
+
+\begin{center}
+\captionsetup{justification=raggedright,singlelinecheck=off}
+\begin{lstlisting}[label=lst:brute-force,caption=Полный перебор]
+def get_cost(matrix, route):
+    now_cost = 0
+
+    for num in range(len(route) - 1):
+        start_city = route[num]
+        end_city = route[num + 1]
+
+        now_cost += matrix[start_city][end_city]
+    
+    return now_cost
+
+
+def get_all_routes(cities):
+    routes = []
+
+    for route in itertools.permutations(cities, len(cities)):
+        route = list(route)
+        route.append(route[0])
+        routes.append(route)
+    
+    return routes
+
+
+def brute_force(count, matrix):
+    cities = [city for city in range(count)]
+    routes = get_all_routes(cities)
+
+    min_cost = inf
+
+    for route in routes:
+        now_cost = get_cost(matrix, route)
+
+        if now_cost < min_cost:
+            min_cost = now_cost
+            min_rout = route
+    
+    return min_rout, min_cost
+\end{lstlisting} 
+\end{center}
+
+\begin{center}
+\captionsetup{justification=raggedright,singlelinecheck=off}
+\begin{lstlisting}[label=lst:ant,caption=Муравьиный алгоритм]
+def ant_algorithm(matrix, size, a, b, p, count_days):
+    min_cost = inf
+
+    q = get_q(matrix, size)
+
+    proximity = get_proximity(matrix, size)
+    pheromones = [[START_PHEROMON for i in range(size)] for j in range(size)]
+    count_ants = size
+
+    for _ in range(count_days):
+        cities = [city for city in range(size)]
+        visited = get_visited_cities(cities, count_ants)
+
+        for ant in range(count_ants):
+            while len(visited[ant]) != count_ants:
+                pk = get_probability(pheromones, proximity,
+                                     visited, a, b, ant, size)
+                next_city = choose_city(pk)
+                visited[ant].append(next_city)
+            visited[ant].append(visited[ant][0])
+
+            now_cost = get_cost(matrix, visited[ant])
+
+            if now_cost < min_cost:
+                min_cost = now_cost
+                min_route = visited[ant]
+
+        pheromones = update_pheromon(visited, matrix, pheromones, size, p, q)
+
+    return min_route, min_cost
+
+\end{lstlisting}
+\end{center}
+\clearpage
+\begin{center}
+\captionsetup{justification=raggedright,singlelinecheck=off}
+\begin{lstlisting}[label=lst:proximity,caption=Алгоритм получения матрицы видимостей городов]
+def get_proximity(matrix, size):
+    proximity = [[0 for i in range(size)] for j in range(size)]
+
+    for i in range(size):
+        for j in range(i):
+            proximity[i][j] = 1 / matrix[i][j]
+            proximity[j][i] = proximity[i][j]
+    
+    return proximity
+\end{lstlisting}
+\end{center}
+
+\begin{center}
+\captionsetup{justification=raggedright,singlelinecheck=off}
+\begin{lstlisting}[label=lst:prob,caption=Алгоритм нахождения вероятностных переходов]
+def get_probability(pheromones, proximity, visited, a, b, ant, city_count):
+    probabilities = [0] * city_count
+
+    now_city = visited[ant][-1]
+
+    for city in range(city_count):
+        if city not in visited[ant]:
+
+            p = ( pheromones[now_city][city] ** a ) * \
+                ( proximity[now_city][city] ** b )
+            
+            probabilities[city] = p
+        else:
+            probabilities[city] = 0
+
+    sum_p = sum(probabilities)
+
+    for city in range(city_count):
+        probabilities[city] /= sum_p
+    
+    return probabilities
+\end{lstlisting}
+\end{center}
+\clearpage
+\begin{center}
+\captionsetup{justification=raggedright,singlelinecheck=off}
+\begin{lstlisting}[label=lst:update,caption=Алгоритм обновления феромона на путях]
+def get_q(matrix, size):
+    q = 0
+    count = 0
+
+    for i in range(size):
+        for j in range(i + 1, size):
+            q += matrix[i][j] * 2
+            count += 2
+
+    return q / count
+
+
+def check_route(i, j, route):
+    if i in route:
+        index_i = route.index(i)
+
+        if j == route[index_i + 1]:
+            return True
+    
+    return False
+
+
+def update_pheromon(visited, matrix, pheromones, city_count, p, q):
+    for i in range(city_count):
+        for j in range(city_count):
+            add = 0
+
+            for ant in range(city_count):
+                if check_route(i, j, visited[ant]):
+                    cost = get_cost(matrix, visited[ant])
+                    add += q / cost
+            
+            pheromones[i][j] *= (1 - p) 
+            pheromones[i][j] += add
+
+            if pheromones[i][j] < MIN_PHEROMON:
+                pheromones[i][j] = MIN_PHEROMON
+
+    return pheromones
+\end{lstlisting}
+\end{center}
+
+\begin{center}
+\captionsetup{justification=raggedright,singlelinecheck=off}
+\begin{lstlisting}[label=lst:choose,caption=Алгоритм выбора города случайным образом]
+def choose_city(probabilities):
+    num = random()
+    value = 0
+
+    for i in range(len(probabilities)):
+        value += probabilities[i]
+
+        if value > num:
+            return i
+\end{lstlisting}
+\end{center}
+
+\section{Функциональные тесты}
+
+В таблице \ref{tbl:func_test_brute} приведены функциональные тесты для функций, реализующих полный перебор, в таблице \ref{tbl:func_test_ant} - для функций, реализующих муравьиный алгоритм. Все тесты пройдены успешно.
+
+\begin{center}
+    \captionsetup{justification=raggedright,singlelinecheck=off}
+    \begin{longtable}[c]{|c|c|c|c|c|}
+    \caption{Функциональные тесты (полный перебор)\label{tbl:func_test_brute}} \\ \hline
+		Матрица & Число городов & Ожидаемый результат \\
+		\hline
+		$ \begin{pmatrix}
+			0 & 5 & 2 & 5 \\
+			5 & 0 & 1 & 1 \\
+			2 & 1 & 0 & 1 \\
+			5 & 1 & 1 & 0 \\
+		\end{pmatrix}$ &
+		4 &
+		[1 2 4 3 1], 9 \\
+		\hline
+		- &
+		-2 &
+		Ошибка \\
+		\hline
+	\end{longtable}
+\end{center}
+\clearpage
+\begin{center}
+    \captionsetup{justification=raggedright,singlelinecheck=off}
+    \begin{longtable}[c]{|c|c|c|c|c|c|c|c|c|c|}
+    \caption{Функциональные тесты (муравьиный алгоритм)\label{tbl:func_test_ant}} \\ \hline
+		Матрица & Число городов & $\alpha$ & $\rho$ & Число дней & Результат \\
+		\hline
+		$ \begin{pmatrix}
+			0 & 5 & 2 & 5 \\
+			5 & 0 & 1 & 1 \\
+			2 & 1 & 0 & 1 \\
+			5 & 1 & 1 & 0 \\
+		\end{pmatrix}$ &
+		4 &
+		0.1 &
+		0.3 &
+		200 &
+		[1 3 2 4 1], 9 \\
+		\hline
+		- &
+		-2 &
+		0.1 &
+		0.3 &
+		200 &
+		Ошибка \\
+		\hline
+		$ \begin{pmatrix}
+			0 & 5 & 2 & 5 \\
+			5 & 0 & 1 & 1 \\
+			2 & 1 & 0 & 1 \\
+			5 & 1 & 1 & 0 \\
+		\end{pmatrix}$ &
+		4 &
+		-2 &
+		0.3 &
+		200 &
+		Ошибка \\
+		\hline
+		$ \begin{pmatrix}
+			0 & 5 & 2 & 5 \\
+			5 & 0 & 1 & 1 \\
+			2 & 1 & 0 & 1 \\
+			5 & 1 & 1 & 0 \\
+		\end{pmatrix}$ &
+		4 &
+		0.1 &
+		-5 &
+		200 &
+		Ошибка \\
+		\hline
+		$ \begin{pmatrix}
+			0 & 5 & 2 & 5 \\
+			5 & 0 & 1 & 1 \\
+			2 & 1 & 0 & 1 \\
+			5 & 1 & 1 & 0 \\
+		\end{pmatrix}$ &
+		4 &
+		0.1 &
+		0.3 &
+		0 &
+		Ошибка \\
+		\hline
+	\end{longtable}
+\end{center}
+
+\section{Вывод}
+
+Были реализованы функции алгоритмов решения задачи коммивояжера. Было проведено функциональное тестирование указанных функций.
